@@ -9,8 +9,8 @@ $row = mysqli_fetch_all($data);
 ?>
 
 <div class="form-group row">
-    <label for="shipping_state" class="col-sm-12 col-form-label">State</label>
-    <div class="col-sm-12">
+    <label for="shipping_state" class="col-sm-3 col-form-label">State</label>
+    <div class="col-sm-9">
 
         <select id="state" class="form-control select2" data-bvalidator="required" name="<?= $fieldname ?>" style="width: 100%;">
             <option value="">Select State</option>

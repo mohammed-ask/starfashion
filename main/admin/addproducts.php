@@ -13,11 +13,11 @@ include "main/session.php";
         <span class="text-gray-700 dark:text-gray-400">Product Display Position</span>
         <select data-bvalidator="required" class="form-control" name="product_display_position[]" multiple>
             <option value="Featured">Featured</option>
-            <option value="Best Seller">Best Seller</option>
+            <option value="Best-Seller">Best Seller</option>
             <option value="Special">Special</option>
             <option value="Latest">Latest</option>
-            <option value="New Arrival">New Arrival</option>
-            <option value="Hot Sales">Hot Sales</option>
+            <option value="New-Arrival">New Arrival</option>
+            <option value="Hot-Sales">Hot Sales</option>
         </select>
     </label>
     <label class="block text-md">
@@ -190,8 +190,8 @@ include "main/session.php";
         <input xdata-bvalidator="required" class="form-control" name="affiliate_commission">
     </label>
     <label class="block text-sm" style="margin-bottom: 5px;">
-        <span class="text-gray-700 dark:text-gray-400">Product Image</span>
-        <input xdata-bvalidator="required" class="form-control" type="file" name="image">
+        <span class="text-gray-700 dark:text-gray-400">Product Thumb Image</span>
+        <input data-bvalidator="required" class="form-control" type="file" name="image">
     </label>
     <label class="block text-sm" style="margin-bottom: 5px;">
         <span class="text-gray-700 dark:text-gray-400">Terms & Condition</span>
@@ -215,6 +215,11 @@ include "main/session.php";
             <option value="18">18%</option>
             <option value="28">28%</option>
         </select>
+    </label>
+    <label class="block text-sm" style="margin-bottom: 5px;">
+        <span class="text-gray-700 dark:text-gray-400">More Images</span>
+        <input xdata-bvalidator="required" multiple class="form-control" type="file" name="moreimage[]">
+        <small>Can upload Multiple</small>
     </label>
     <div>
         <button type="submit" id="modalsubmit" class="px-4 py-2  text-sm  bg-blue  rounded-lg hidden">Submit</button>

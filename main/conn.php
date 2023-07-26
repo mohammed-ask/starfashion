@@ -88,6 +88,9 @@ $companylogo = $obj->fetchattachment($compdata["uploadfile_id"]);
 $companyfavicon = $obj->fetchattachment($compdata["faviconicon"]);
 $qrimage = $obj->fetchattachment($compdata['paymentqr']);
 $upiid = $compdata['upiid'];
+$companypersonname = 'Mohammed Husain';
+$companygstno = $compdata["gst_no"];
+
 $requesttoken = '';
 $redirecturl = ($platform == "test") ?  "http://localhost/indiastock" : "https://pms-equity.com";
 if (isset($_GET['RequestToken'])) {

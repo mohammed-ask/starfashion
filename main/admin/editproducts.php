@@ -120,7 +120,7 @@ $row = $obj->fetch_assoc($result);
     </label><br>
     <label class="block text-sm" style="margin-bottom: 5px;">
         <span class="text-gray-700 dark:text-gray-400">Occasions</span>
-        <select data-bvalidator="required" class="form-control" name="occasions" id="occasions" multiple>
+        <select data-bvalidator="required" class="form-control" name="occasions[]" id="occasions" multiple>
             <?php
             $category = $obj->selectextrawhereupdate("occasion", "id,name", "status = 1");
             $cat = mysqli_fetch_all($category);

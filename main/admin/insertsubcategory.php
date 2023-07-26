@@ -3,8 +3,9 @@ include "main/session.php";
 /* @var $obj db */
 ob_start();
 $path = "main/uploads/category";
-
-$_POST['image'] = $obj->uploadfilenew($path, $_FILES, 'image', array("png", "jpg", "jpeg", "png", "webp"));
+if (!empty($_FILES["image"]["name"])) {
+    $_POST['image'] = $obj->uploadfilenew($path, $_FILES, 'image', array("png", "jpg", "jpeg", "png", "webp"));
+}
 $_POST['added_on'] = date('Y-m-d H:i:s');
 $_POST['added_by'] = $employeeid;
 $_POST['updated_on'] = date('Y-m-d H:i:s');

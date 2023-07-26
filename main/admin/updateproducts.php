@@ -12,14 +12,14 @@ $path = "main/uploads/category";
 
 // $xx['file_products'] = $obj->uploadfilenew($path, $_FILES, 'image', array("png", "jpg", "jpeg", "png", "webp"));
 if (!empty($_FILES["image"]["name"])) {
-    $uplid = $obj->selectfield("products", "file_products", "id", $sid);
+    $uplid = $obj->selectfield("products", "file_products", "id", $id);
     $oldfile = $obj->selectfield("uploadfile", "path", "id", $uplid);
     if (file_exists($oldfile)) {
         $delfile = unlink($oldfile);
         $del_file = $obj->updatewhere("uploadfile", ["status" => 99], "id=$uplid");
     }
     $imgreturn = $obj->uploadfilenew($path, $_FILES, "image",  array("jpg", "jpeg", "png", 'webp'));
-    $_POST["file_products"] = $imgreturn;
+    $xx["file_products"] = $imgreturn;
 }
 $xx['added_on'] = date('Y-m-d H:i:s');
 $xx['added_by'] = $employeeid;
@@ -38,7 +38,7 @@ $xx["product_condition"] = $_POST["product_condition"];
 $xx["sticker"] = $_POST["sticker"];
 $xx["gender_for"] = $_POST["gender_for"];
 $xx["age_for"] = $_POST["age_for"];
-$xx["occasions"] = implode(",", $_POST["ocassions"]);
+$xx["occasions"] = implode(",", $_POST["occasions"]);
 $xx["material_used"] = $_POST["material_used"];
 $xx["size"] = implode(",", $_POST["size"]);
 $xx["color"] = $_POST["color"];

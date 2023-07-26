@@ -5,12 +5,32 @@ include './main/conn.php';
 ob_start();
 $rowslides = $obj->selectextrawhere("slide", "isactive='Yes' and status = 1");
 $featured = $obj->selectextrawhere("products", "isactive='Yes' and status = 1 and product_display_position like '%Featured%' order by id desc limit 3 ");
-// echo "<pre>";
-// $rowfeatured = mysqli_fetch_all($rowfeatured, 1);
-// echo "</pre>";
+$bestseller = $obj->selectextrawhere("products", "isactive='Yes' and status = 1 and product_display_position like '%Best-Seller%' order by id desc limit 8 ");
+$newarrival = $obj->selectextrawhere("products", "isactive='Yes' and status = 1 and product_display_position like '%New-Arrival%' order by id desc limit 8 ");
+$hotsales = $obj->selectextrawhere("products", "isactive='Yes' and status = 1 and product_display_position like '%Hot-Sales%' order by id desc limit 8 ");
+echo "<pre>";
+$rowfeatured = mysqli_fetch_all($featured, 1);
+$rowbestseller = mysqli_fetch_all($bestseller, 1);
+$rownewarrival = mysqli_fetch_all($newarrival, 1);
+$rowhotsales = mysqli_fetch_all($hotsales, 1);
+$alltrends = array_merge($rowbestseller, $rownewarrival, $rowhotsales);
+$alltrendsfiltered = array();
+foreach ($alltrends as $item) {
+    $id = $item['id'];
+    if (!isset($alltrendsfiltered[$id])) {
+        $alltrendsfiltered[$id] = $item;
+    }
+}
+// print_r($uniqueArr);
+echo "</pre>";
 
 ?>
-
+<style>
+    .size {
+        width: 470px;
+        height: 470px;
+    }
+</style>
 <!-- Hero Section Begin -->
 <section class="hero">
     <div class="hero__slider owl-carousel">
@@ -66,39 +86,45 @@ $featured = $obj->selectextrawhere("products", "isactive='Yes' and status = 1 an
 <section class="banner spad">
     <div class="container">
         <div class="row">
-            <div class="col-lg-7 offset-lg-4">
-                <div class="banner__item">
-                    <div class="banner__item__pic">
-                        <img src="<?= $rowfeatured[0][""] ?>" alt="">
-                    </div>
-                    <div class="banner__item__text">
-                        <h2>Clothing Collections 2030</h2>
-                        <a href="#">Shop now</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-5">
-                <div class="banner__item banner__item--middle">
-                    <div class="banner__item__pic">
-                        <img src="main/dist/img/banner/banner-2.jpg" alt="">
-                    </div>
-                    <div class="banner__item__text">
-                        <h2>Accessories</h2>
-                        <a href="#">Shop now</a>
+            <?php if (isset($rowfeatured[0])) { ?>
+                <div class="col-lg-7 offset-lg-4">
+                    <div class="banner__item">
+                        <div class="banner__item__pic size">
+                            <img src="<?= $obj->fetchattachment($rowfeatured[0]["file_products"]) ?>" alt="">
+                        </div>
+                        <div class="banner__item__text">
+                            <h2><?= $rowfeatured[0]['product_name'] ?></h2>
+                            <a href="#">Shop now</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-7">
-                <div class="banner__item banner__item--last">
-                    <div class="banner__item__pic">
-                        <img src="main/dist/img/banner/banner-3.jpg" alt="">
-                    </div>
-                    <div class="banner__item__text">
-                        <h2>Shoes Spring 2030</h2>
-                        <a href="#">Shop now</a>
+            <?php }
+            if (isset($rowfeatured[1])) {  ?>
+                <div class="col-lg-5">
+                    <div class="banner__item banner__item--middle">
+                        <div class="banner__item__pic size">
+                            <img src="<?= $obj->fetchattachment($rowfeatured[1]["file_products"])  ?>" alt="">
+                        </div>
+                        <div class="banner__item__text">
+                            <h2><?= $rowfeatured[1]['product_name'] ?></h2>
+                            <a href="#">Shop now</a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            <?php }
+            if (isset($rowfeatured[2])) {  ?>
+                <div class="col-lg-7">
+                    <div class="banner__item banner__item--last">
+                        <div class="banner__item__pic size">
+                            <img src="<?= $obj->fetchattachment($rowfeatured[2]["file_products"]) ?>" alt="">
+                        </div>
+                        <div class="banner__item__text">
+                            <h2><?= $rowfeatured[2]['product_name'] ?></h2>
+                            <a href="#">Shop now</a>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
             <!-- <div class="col-lg-7">
                 <div class="banner__item banner__item--last">
                     <div class="banner__item__pic">
@@ -121,14 +147,53 @@ $featured = $obj->selectextrawhere("products", "isactive='Yes' and status = 1 an
         <div class="row">
             <div class="col-lg-12">
                 <ul class="filter__controls">
-                    <li class="active" data-filter="*">Best Sellers</li>
-                    <li data-filter=".new-arrivals">New Arrivals</li>
-                    <li data-filter=".hot-sales">Hot Sales</li>
+                    <li class="active" data-filter=".Best-Seller">Best Sellers</li>
+                    <li data-filter=".New-Arrival">New Arrivals</li>
+                    <li data-filter=".Hot-Sales">Hot Sales</li>
                 </ul>
             </div>
         </div>
         <div class="row product__filter">
-            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
+            <?php foreach ($alltrendsfiltered as $key => $value) { ?>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix <?= str_replace(',', ' ', $value['product_display_position']) ?>">
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg" data-setbg="<?= $obj->fetchattachment($value['file_products']) ?>">
+                            <?php if ($value['sticker'] !== 'None') { ?>
+                                <span class="label"><?= $value['sticker'] ?></span>
+                            <?php } ?>
+                            <ul class="product__hover">
+                                <li><a href="#"><img src="main/dist/img/icon/heart.png" alt=""></a></li>
+                                <!-- <li><a href="#"><img src="main/dist/img/icon/compare.png" alt=""> <span>Compare</span></a></li> -->
+                                <li><a href="#"><img src="main/dist/img/icon/search.png" alt=""></a></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6><?= $value['product_name'] ?></h6>
+                            <a href="#" class="add-cart">+ Add To Cart</a>
+                            <div class="rating">
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                            </div>
+                            <h5>₹<?= $value['net_price'] ?></h5>
+                            <div class="product__color__select">
+                                <label for="pc-1">
+                                    <input type="radio" id="pc-1">
+                                </label>
+                                <label class="active black" for="pc-2">
+                                    <input type="radio" id="pc-2">
+                                </label>
+                                <label class="grey" for="pc-3">
+                                    <input type="radio" id="pc-3">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php } ?>
+            <!-- <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix New-Arrival Best-Seller">
                 <div class="product__item">
                     <div class="product__item__pic set-bg" data-setbg="main/dist/img/product/product-1.jpg">
                         <span class="label">New</span>
@@ -163,7 +228,7 @@ $featured = $obj->selectextrawhere("products", "isactive='Yes' and status = 1 an
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
+            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix Hot-Sales">
                 <div class="product__item">
                     <div class="product__item__pic set-bg" data-setbg="main/dist/img/product/product-2.jpg">
                         <ul class="product__hover">
@@ -197,7 +262,7 @@ $featured = $obj->selectextrawhere("products", "isactive='Yes' and status = 1 an
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
+            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix New-Arrival">
                 <div class="product__item sale">
                     <div class="product__item__pic set-bg" data-setbg="main/dist/img/product/product-3.jpg">
                         <span class="label">Sale</span>
@@ -232,7 +297,7 @@ $featured = $obj->selectextrawhere("products", "isactive='Yes' and status = 1 an
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
+            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix Hot-Sales">
                 <div class="product__item">
                     <div class="product__item__pic set-bg" data-setbg="main/dist/img/product/product-4.jpg">
                         <ul class="product__hover">
@@ -266,7 +331,7 @@ $featured = $obj->selectextrawhere("products", "isactive='Yes' and status = 1 an
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
+            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix New-Arrival">
                 <div class="product__item">
                     <div class="product__item__pic set-bg" data-setbg="main/dist/img/product/product-5.jpg">
                         <ul class="product__hover">
@@ -300,7 +365,7 @@ $featured = $obj->selectextrawhere("products", "isactive='Yes' and status = 1 an
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
+            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix Hot-Sales">
                 <div class="product__item sale">
                     <div class="product__item__pic set-bg" data-setbg="main/dist/img/product/product-6.jpg">
                         <span class="label">Sale</span>
@@ -335,7 +400,7 @@ $featured = $obj->selectextrawhere("products", "isactive='Yes' and status = 1 an
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
+            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix New-Arrival">
                 <div class="product__item">
                     <div class="product__item__pic set-bg" data-setbg="main/dist/img/product/product-7.jpg">
                         <ul class="product__hover">
@@ -369,7 +434,7 @@ $featured = $obj->selectextrawhere("products", "isactive='Yes' and status = 1 an
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales">
+            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix Hot-Sales">
                 <div class="product__item">
                     <div class="product__item__pic set-bg" data-setbg="main/dist/img/product/product-8.jpg">
                         <ul class="product__hover">
@@ -402,7 +467,7 @@ $featured = $obj->selectextrawhere("products", "isactive='Yes' and status = 1 an
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </section>
@@ -457,7 +522,7 @@ $featured = $obj->selectextrawhere("products", "isactive='Yes' and status = 1 an
 <!-- Categories Section End -->
 
 <!-- Instagram Section Begin -->
-<section class="instagram spad">
+<section class="instagram spad mb-5">
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
@@ -484,7 +549,7 @@ $featured = $obj->selectextrawhere("products", "isactive='Yes' and status = 1 an
 <!-- Instagram Section End -->
 
 <!-- Latest Blog Section Begin -->
-<section class="latest spad">
+<!-- <section class="latest spad">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
@@ -527,7 +592,7 @@ $featured = $obj->selectextrawhere("products", "isactive='Yes' and status = 1 an
             </div>
         </div>
     </div>
-</section>
+</section> -->
 <!-- Latest Blog Section End -->
 <?php
 //Assign all Page Specific variables

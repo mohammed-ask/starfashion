@@ -2,7 +2,7 @@
 include "main/session.php";
 /* @var $obj db */
 // echo "<pre>";
-// print_r($_POST);
+// print_r($_FILES['moreimage']);
 // die;
 ob_start();
 $path = "main/uploads/category";
@@ -14,9 +14,9 @@ $xx['updated_on'] = date('Y-m-d H:i:s');
 $xx['updated_by'] = $employeeid;
 $xx['status'] = 1;
 $xx["category_id"] = $_POST["category_id"];
-$xx["category_txt"] = $obj->selectfieldwhere("subcategories","name","id=".$_POST["category_id"]."");
-$catid = $obj->selectfieldwhere("subcategories","category_id","id=".$_POST["category_id"]."");
-$xx["parent_category_txt"] = $obj->selectfieldwhere("categories","name","id=".$catid."");
+$xx["category_txt"] = $obj->selectfieldwhere("subcategories", "name", "id=" . $_POST["category_id"] . "");
+$catid = $obj->selectfieldwhere("subcategories", "categoryid", "id=" . $_POST["category_id"] . "");
+$xx["parent_category_txt"] = $obj->selectfieldwhere("categories", "name", "id=" . $catid . "");
 $xx["product_name"] = $_POST["product_name"];
 $xx["product_title"] = $_POST["product_title"];
 $xx["brand"] = $_POST["brand"];
@@ -28,7 +28,7 @@ $xx["product_condition"] = $_POST["product_condition"];
 $xx["sticker"] = $_POST["sticker"];
 $xx["gender_for"] = $_POST["gender_for"];
 $xx["age_for"] = $_POST["age_for"];
-$xx["occasions"] = implode(",", $_POST["ocassions"]);;
+$xx["occasions"] = implode(",", $_POST["occasions"]);;
 $xx["material_used"] = $_POST["material_used"];
 $xx["size"] = implode(",", $_POST["size"]);
 $xx["color"] = $_POST["color"];
@@ -49,7 +49,28 @@ $xx["damage_return"] = $_POST["damage_return"];
 $xx["product_display_position"] = implode(",", $_POST["product_display_position"]);
 $xx["gstrate"] = $_POST["gstrate"];
 $tb_name = "products";
-$pradin = $obj->insertnew($tb_name, $xx);
+$productid = $obj->insertnew($tb_name, $xx);
+
+if (!empty($_FILES["moreimage"]["name"])) {
+    foreach ($_FILES["moreimage"]['name'] as $key => $value) {
+        $name = 'moreimage' . $key;
+        $document[$name]['name'] = $_FILES['moreimage']['name'][$key];
+        $document[$name]['type'] = $_FILES['moreimage']['type'][$key];
+        $document[$name]['tmp_name'] = $_FILES['moreimage']['tmp_name'][$key];
+        $document[$name]['size'] = $_FILES['moreimage']['size'][$key];
+        $document[$name]['error'] = $_FILES['moreimage']['error'][$key];
+        $yc['pathid'] = $obj->uploadfilenew($path, $document, $name, array("png", "jpg", "jpeg", "pdf", "doc"));
+        $yc['productid'] = $productid;
+        $yc['added_on'] = date('Y-m-d H:i:s');
+        $yc['added_by'] = $employeeid;
+        $yc['updated_on'] = date('Y-m-d H:i:s');
+        $yc['updated_by'] = $employeeid;
+        $yc['status'] = 1;
+        $postdata = $yc;
+        $tb_name = "productimages";
+        $pradin = $obj->insertnew($tb_name, $postdata);
+    }
+}
 if (is_integer($pradin) && $pradin > 0) {
     echo "Redirect : New Category has been Added  URLproducts";
 } else {

@@ -77,6 +77,11 @@ function data() {
       this.isCategoryOpen = !this.isCategoryOpen
     },
 
+    isInventoryOpen: false,
+    toggleInventory() {
+      this.isInventoryOpen = !this.isInventoryOpen
+    },
+
     isSettingOpen: false,
     toggleSetting() {
       this.isSettingOpen = !this.isSettingOpen

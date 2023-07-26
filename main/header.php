@@ -14,14 +14,14 @@
                             <a href="#">Sign in</a>
                             <a href="#">FAQs</a>
                         </div>
-                        <div class="header__top__hover">
+                        <!-- <div class="header__top__hover">
                             <span>Usd <i class="arrow_carrot-down"></i></span>
                             <ul>
                                 <li>USD</li>
                                 <li>EUR</li>
                                 <li>USD</li>
                             </ul>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
