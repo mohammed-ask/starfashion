@@ -8,7 +8,8 @@ $featured = $obj->selectextrawhere("products", "isactive='Yes' and status = 1 an
 $bestseller = $obj->selectextrawhere("products", "isactive='Yes' and status = 1 and product_display_position like '%Best-Seller%' order by id desc limit 8 ");
 $newarrival = $obj->selectextrawhere("products", "isactive='Yes' and status = 1 and product_display_position like '%New-Arrival%' order by id desc limit 8 ");
 $hotsales = $obj->selectextrawhere("products", "isactive='Yes' and status = 1 and product_display_position like '%Hot-Sales%' order by id desc limit 8 ");
-echo "<pre>";
+$rowspecial = $obj->selectextrawhere("products", "isactive='Yes' and status = 1 and product_display_position like '%Special%' order by id desc limit 1 ")->fetch_assoc();
+// echo "<pre>";
 $rowfeatured = mysqli_fetch_all($featured, 1);
 $rowbestseller = mysqli_fetch_all($bestseller, 1);
 $rownewarrival = mysqli_fetch_all($newarrival, 1);
@@ -22,7 +23,7 @@ foreach ($alltrends as $item) {
     }
 }
 // print_r($uniqueArr);
-echo "</pre>";
+// echo "</pre>";
 
 ?>
 <style>
@@ -169,7 +170,7 @@ echo "</pre>";
                         </div>
                         <div class="product__item__text">
                             <h6><?= $value['product_name'] ?></h6>
-                            <a href="#" class="add-cart">+ Add To Cart</a>
+                            <a onclick="addcart(<?= $value['id'] ?>)" class="add-cart text-danger" style="cursor:pointer">+ Add To Cart</a>
                             <div class="rating">
                                 <i class="fa fa-star-o"></i>
                                 <i class="fa fa-star-o"></i>
@@ -177,7 +178,7 @@ echo "</pre>";
                                 <i class="fa fa-star-o"></i>
                                 <i class="fa fa-star-o"></i>
                             </div>
-                            <h5>₹<?= $value['net_price'] ?></h5>
+                            <h5><?= $currencysymbol ?><?= $value['final_price'] ?></h5>
                             <div class="product__color__select">
                                 <label for="pc-1">
                                     <input type="radio" id="pc-1">
@@ -193,281 +194,7 @@ echo "</pre>";
                     </div>
                 </div>
             <?php } ?>
-            <!-- <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix New-Arrival Best-Seller">
-                <div class="product__item">
-                    <div class="product__item__pic set-bg" data-setbg="main/dist/img/product/product-1.jpg">
-                        <span class="label">New</span>
-                        <ul class="product__hover">
-                            <li><a href="#"><img src="main/dist/img/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="main/dist/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                            <li><a href="#"><img src="main/dist/img/icon/search.png" alt=""></a></li>
-                        </ul>
-                    </div>
-                    <div class="product__item__text">
-                        <h6>Piqué Biker Jacket</h6>
-                        <a href="#" class="add-cart">+ Add To Cart</a>
-                        <div class="rating">
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                        </div>
-                        <h5>$67.24</h5>
-                        <div class="product__color__select">
-                            <label for="pc-1">
-                                <input type="radio" id="pc-1">
-                            </label>
-                            <label class="active black" for="pc-2">
-                                <input type="radio" id="pc-2">
-                            </label>
-                            <label class="grey" for="pc-3">
-                                <input type="radio" id="pc-3">
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix Hot-Sales">
-                <div class="product__item">
-                    <div class="product__item__pic set-bg" data-setbg="main/dist/img/product/product-2.jpg">
-                        <ul class="product__hover">
-                            <li><a href="#"><img src="main/dist/img/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="main/dist/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                            <li><a href="#"><img src="main/dist/img/icon/search.png" alt=""></a></li>
-                        </ul>
-                    </div>
-                    <div class="product__item__text">
-                        <h6>Piqué Biker Jacket</h6>
-                        <a href="#" class="add-cart">+ Add To Cart</a>
-                        <div class="rating">
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                        </div>
-                        <h5>$67.24</h5>
-                        <div class="product__color__select">
-                            <label for="pc-4">
-                                <input type="radio" id="pc-4">
-                            </label>
-                            <label class="active black" for="pc-5">
-                                <input type="radio" id="pc-5">
-                            </label>
-                            <label class="grey" for="pc-6">
-                                <input type="radio" id="pc-6">
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix New-Arrival">
-                <div class="product__item sale">
-                    <div class="product__item__pic set-bg" data-setbg="main/dist/img/product/product-3.jpg">
-                        <span class="label">Sale</span>
-                        <ul class="product__hover">
-                            <li><a href="#"><img src="main/dist/img/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="main/dist/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                            <li><a href="#"><img src="main/dist/img/icon/search.png" alt=""></a></li>
-                        </ul>
-                    </div>
-                    <div class="product__item__text">
-                        <h6>Multi-pocket Chest Bag</h6>
-                        <a href="#" class="add-cart">+ Add To Cart</a>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-o"></i>
-                        </div>
-                        <h5>$43.48</h5>
-                        <div class="product__color__select">
-                            <label for="pc-7">
-                                <input type="radio" id="pc-7">
-                            </label>
-                            <label class="active black" for="pc-8">
-                                <input type="radio" id="pc-8">
-                            </label>
-                            <label class="grey" for="pc-9">
-                                <input type="radio" id="pc-9">
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix Hot-Sales">
-                <div class="product__item">
-                    <div class="product__item__pic set-bg" data-setbg="main/dist/img/product/product-4.jpg">
-                        <ul class="product__hover">
-                            <li><a href="#"><img src="main/dist/img/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="main/dist/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                            <li><a href="#"><img src="main/dist/img/icon/search.png" alt=""></a></li>
-                        </ul>
-                    </div>
-                    <div class="product__item__text">
-                        <h6>Diagonal Textured Cap</h6>
-                        <a href="#" class="add-cart">+ Add To Cart</a>
-                        <div class="rating">
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                        </div>
-                        <h5>$60.9</h5>
-                        <div class="product__color__select">
-                            <label for="pc-10">
-                                <input type="radio" id="pc-10">
-                            </label>
-                            <label class="active black" for="pc-11">
-                                <input type="radio" id="pc-11">
-                            </label>
-                            <label class="grey" for="pc-12">
-                                <input type="radio" id="pc-12">
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix New-Arrival">
-                <div class="product__item">
-                    <div class="product__item__pic set-bg" data-setbg="main/dist/img/product/product-5.jpg">
-                        <ul class="product__hover">
-                            <li><a href="#"><img src="main/dist/img/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="main/dist/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                            <li><a href="#"><img src="main/dist/img/icon/search.png" alt=""></a></li>
-                        </ul>
-                    </div>
-                    <div class="product__item__text">
-                        <h6>Lether Backpack</h6>
-                        <a href="#" class="add-cart">+ Add To Cart</a>
-                        <div class="rating">
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                        </div>
-                        <h5>$31.37</h5>
-                        <div class="product__color__select">
-                            <label for="pc-13">
-                                <input type="radio" id="pc-13">
-                            </label>
-                            <label class="active black" for="pc-14">
-                                <input type="radio" id="pc-14">
-                            </label>
-                            <label class="grey" for="pc-15">
-                                <input type="radio" id="pc-15">
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix Hot-Sales">
-                <div class="product__item sale">
-                    <div class="product__item__pic set-bg" data-setbg="main/dist/img/product/product-6.jpg">
-                        <span class="label">Sale</span>
-                        <ul class="product__hover">
-                            <li><a href="#"><img src="main/dist/img/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="main/dist/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                            <li><a href="#"><img src="main/dist/img/icon/search.png" alt=""></a></li>
-                        </ul>
-                    </div>
-                    <div class="product__item__text">
-                        <h6>Ankle Boots</h6>
-                        <a href="#" class="add-cart">+ Add To Cart</a>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-o"></i>
-                        </div>
-                        <h5>$98.49</h5>
-                        <div class="product__color__select">
-                            <label for="pc-16">
-                                <input type="radio" id="pc-16">
-                            </label>
-                            <label class="active black" for="pc-17">
-                                <input type="radio" id="pc-17">
-                            </label>
-                            <label class="grey" for="pc-18">
-                                <input type="radio" id="pc-18">
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix New-Arrival">
-                <div class="product__item">
-                    <div class="product__item__pic set-bg" data-setbg="main/dist/img/product/product-7.jpg">
-                        <ul class="product__hover">
-                            <li><a href="#"><img src="main/dist/img/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="main/dist/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                            <li><a href="#"><img src="main/dist/img/icon/search.png" alt=""></a></li>
-                        </ul>
-                    </div>
-                    <div class="product__item__text">
-                        <h6>T-shirt Contrast Pocket</h6>
-                        <a href="#" class="add-cart">+ Add To Cart</a>
-                        <div class="rating">
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                        </div>
-                        <h5>$49.66</h5>
-                        <div class="product__color__select">
-                            <label for="pc-19">
-                                <input type="radio" id="pc-19">
-                            </label>
-                            <label class="active black" for="pc-20">
-                                <input type="radio" id="pc-20">
-                            </label>
-                            <label class="grey" for="pc-21">
-                                <input type="radio" id="pc-21">
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix Hot-Sales">
-                <div class="product__item">
-                    <div class="product__item__pic set-bg" data-setbg="main/dist/img/product/product-8.jpg">
-                        <ul class="product__hover">
-                            <li><a href="#"><img src="main/dist/img/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="main/dist/img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                            <li><a href="#"><img src="main/dist/img/icon/search.png" alt=""></a></li>
-                        </ul>
-                    </div>
-                    <div class="product__item__text">
-                        <h6>Basic Flowing Scarf</h6>
-                        <a href="#" class="add-cart">+ Add To Cart</a>
-                        <div class="rating">
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                        </div>
-                        <h5>$26.28</h5>
-                        <div class="product__color__select">
-                            <label for="pc-22">
-                                <input type="radio" id="pc-22">
-                            </label>
-                            <label class="active black" for="pc-23">
-                                <input type="radio" id="pc-23">
-                            </label>
-                            <label class="grey" for="pc-24">
-                                <input type="radio" id="pc-24">
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
+
         </div>
     </div>
 </section>
@@ -479,22 +206,22 @@ echo "</pre>";
         <div class="row">
             <div class="col-lg-3">
                 <div class="categories__text">
-                    <h2>Clothings Hot <br /> <span>Shoe Collection</span> <br /> Accessories</h2>
+                    <h2><?= $rowspecial['parent_category_txt'] ?> <br /> <span><?= $rowspecial['category_txt'] ?></span> <br /> <?= $rowspecial['product_name'] ?></h2>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="categories__hot__deal">
-                    <img src="main/dist/img/product-sale.png" alt="">
+                    <img src="<?= $obj->fetchattachment($rowspecial["file_products"]) ?>" alt="">
                     <div class="hot__deal__sticker">
                         <span>Sale Of</span>
-                        <h5>$29.99</h5>
+                        <h5><?= $currencysymbol ?><?= $rowspecial['discount'] ?></h5>
                     </div>
                 </div>
             </div>
             <div class="col-lg-4 offset-lg-1">
                 <div class="categories__deal__countdown">
                     <span>Deal Of The Week</span>
-                    <h2>Multi-pocket Chest Bag Black</h2>
+                    <h2><?= $rowspecial['product_name'] ?></h2>
                     <div class="categories__deal__countdown__timer" id="countdown">
                         <div class="cd-item">
                             <span>3</span>
@@ -540,7 +267,7 @@ echo "</pre>";
                     <h2>Instagram</h2>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
                         labore et dolore magna aliqua.</p>
-                    <h3>#Male_Fashion</h3>
+                    <h3>#Fellow</h3>
                 </div>
             </div>
         </div>
@@ -604,3 +331,22 @@ $contentheader = "";
 $pageheader = "";
 include "main/templete.php";
 ?>
+<script>
+    const addcart = (productid) => {
+        $.post({
+            url: "main/addtocart.php",
+            data: {
+                productid: productid,
+                userid: '<?= $customerid ?>'
+            },
+            success: function(response) {
+                console.log(response)
+                if (response === 'Success') {
+                    alertify.success('Item Added to Cart');
+                } else if (response === 'Failed') {
+                    alertify.error('Item Already Added to Cart');
+                }
+            },
+        });
+    }
+</script>

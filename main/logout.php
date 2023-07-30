@@ -2,7 +2,7 @@
 include 'main/session.php';
 $head = "login";
 if (($_SERVER['HTTP_HOST'] == 'localhost')) {
-    $head = "/indiastock";
+    $head = "/starfashion";
 }
 if (str_contains($_SERVER['REQUEST_URI'], "admin")) {
     $head = '/admin/adminlogin';

@@ -5,23 +5,25 @@
             <div class="row">
                 <div class="col-lg-6 col-md-7">
                     <div class="header__top__left">
-                        <p>Free shipping, 30-day return or refund guarantee.</p>
+                        <p>Free shipping, 6-day return or refund guarantee.</p>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-5">
                     <div class="header__top__right">
                         <div class="header__top__links">
-                            <a href="#">Sign in</a>
-                            <a href="#">FAQs</a>
+                            <?php if (!empty($customerid)) { ?>
+                                <div class="header__top__hover">
+                                    <span><?= $customername ?> <i class="arrow_carrot-down"></i></span>
+                                    <ul>
+                                        <li class="m-2"><i class="fa fa-user"></i><a style="color:black;margin-left:5px" href="#">Profile</a></li>
+                                        <li class="m-2"><i class="fa fa-sign-out"></i><a style="color:black" href="logout">Logout</a></li>
+                                    </ul>
+                                </div>
+                            <?php } else { ?>
+                                <a class="anchorstyle" href="login">Sign in</a>
+                            <?php } ?>
+                            <a class="anchorstyle ml-2" href="faqs">FAQs</a>
                         </div>
-                        <!-- <div class="header__top__hover">
-                            <span>Usd <i class="arrow_carrot-down"></i></span>
-                            <ul>
-                                <li>USD</li>
-                                <li>EUR</li>
-                                <li>USD</li>
-                            </ul>
-                        </div> -->
                     </div>
                 </div>
             </div>
@@ -31,15 +33,15 @@
         <div class="row">
             <div class="col-lg-3 col-md-3">
                 <div class="header__logo">
-                    <a href="./index.html"><img src="main/dist/img/starfashion.jpg" alt=""></a>
+                    <a href="./index.html"><img src="main/dist/img/starfashion.png" alt=""></a>
                 </div>
             </div>
             <div class="col-lg-6 col-md-6">
                 <nav class="header__menu mobile-menu">
                     <ul>
-                        <li class="active"><a href="./index.html">Home</a></li>
-                        <li><a href="./shop.html">Shop</a></li>
-                        <li><a href="#">Pages</a>
+                        <li class="active"><a class="noun" href="./index">Home</a></li>
+                        <li><a class="noun" href="shop">Shop</a></li>
+                        <li><a class="noun" href="#">Pages</a>
                             <ul class="dropdown">
                                 <li><a href="./about.html">About Us</a></li>
                                 <li><a href="./shop-details.html">Shop Details</a></li>
@@ -48,8 +50,8 @@
                                 <li><a href="./blog-details.html">Blog Details</a></li>
                             </ul>
                         </li>
-                        <li><a href="./blog.html">Blog</a></li>
-                        <li><a href="./contact.html">Contacts</a></li>
+                        <!-- <li><a class="noun" href="blogl">Blog</a></li> -->
+                        <li><a class="noun" href="contactus">Contacts</a></li>
                     </ul>
                 </nav>
             </div>
@@ -57,8 +59,12 @@
                 <div class="header__nav__option">
                     <a href="#" class="search-switch"><img src="main/dist/img/icon/search.png" alt=""></a>
                     <a href="#"><img src="main/dist/img/icon/heart.png" alt=""></a>
-                    <a href="#"><img src="main/dist/img/icon/cart.png" alt=""> <span>0</span></a>
-                    <div class="price">$0.00</div>
+                    <a style="cursor:pointer" onclick="<?= !empty($userData) ? 'redir(\'' . $userData["userid"] . '\',\'\',\'cart\',\'_blank\')' : 'window.location.href=\'cart\'' ?>">
+                        <img src="main/dist/img/icon/cart.png" alt="">
+                        <span>0</span>
+                    </a>
+                    <div class="price"><?= $currencysymbol ?><?= number_format($carttotal, 2) ?></div>
+                    <div id='redirect'></div>
                 </div>
             </div>
         </div>

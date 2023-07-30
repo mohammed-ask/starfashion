@@ -1,7 +1,7 @@
 <?php
 include "main/session.php";
 $id = $_GET['hakuna'];
-$result = $obj->selectextrawhere("about", "id=$id");
+$result = $obj->selectextrawhere("contact_us", "id=$id");
 $row = $obj->fetch_assoc($result);
 ?>
 <div class="row">

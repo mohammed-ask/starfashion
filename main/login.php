@@ -1,8 +1,8 @@
 <?php
 session_start();
-if (isset($_SESSION['userid']) && $_SESSION['type'] == 2) {
+if (isset($_SESSION['userid']) && $_SESSION['type'] == 'client') {
     $employeeid = $_SESSION['userid'];
-    header("location:dashboard");
+    header("location:index");
 }
 include './main/function.php';
 include './main/conn.php';
@@ -35,62 +35,66 @@ include './main/conn.php';
     <link rel="shortcut icon" href="main/images/logo/favicon.svg">
 
     <style>
-/* --------------------alertify---------------- */
+        /* --------------------alertify---------------- */
 
-.alertify .ajs-header {
-display: none;
+        .alertify .ajs-header {
+            display: none;
 
-}
-
-
-.alertify .ajs-footer {
-  /* padding: 4px; */
-  margin-left: 0px !important;
-  margin-right: 0px !important;
-  min-height: 35px !important;
-  background-color: #00aaaa2e !important;
-  padding: 0px !important;
-}
-
-.alertify .ajs-dialog {
-  
-  padding: 15px 0px 0 0px !important;
-  max-width: 400px !important;
-  border-radius: 5px !important;
-  top: 25%;
-}
-
-.alertify .ajs-footer .ajs-buttons.ajs-primary .ajs-button {
-  margin: 0px !important;
-}
-
-.alertify .ajs-commands {
-  margin:-12px 10px 0 0 !important; 
-}
-
-.alertify .ajs-footer .ajs-buttons .ajs-button.ajs-ok {
-  color: #fff !important;
-    border: 1px dotted #fff;
-    border-radius: 5px;
-    /* margin-right: 10px !important; */
-    margin: 5px 6px 5px 10px !important;
-    background-color: #00aaaa;
-}
-
-.alertify .ajs-dimmer {
-  
-  transition-timing-function: ease-in;
-  transition-duration: 500ms !important;
-}
-
-  .alertify .ajs-modal {
-  
-    transition-timing-function: ease-out;
-    transition-duration: 500ms !important;}
+        }
 
 
+        .alertify .ajs-footer {
+            /* padding: 4px; */
+            margin-left: 0px !important;
+            margin-right: 0px !important;
+            min-height: 35px !important;
+            background-color: <?= $golden ?>2e !important;
+            padding: 0px !important;
+        }
 
+        .alertify .ajs-dialog {
 
+            padding: 15px 0px 0 0px !important;
+            max-width: 400px !important;
+            border-radius: 5px !important;
+            top: 25%;
+        }
+
+        .alertify .ajs-footer .ajs-buttons.ajs-primary .ajs-button {
+            margin: 0px !important;
+        }
+
+        .alertify .ajs-commands {
+            margin: -12px 10px 0 0 !important;
+        }
+
+        .alertify .ajs-footer .ajs-buttons .ajs-button.ajs-ok {
+            color: #fff !important;
+            border: 1px dotted #fff;
+            border-radius: 5px;
+            /* margin-right: 10px !important; */
+            margin: 5px 6px 5px 10px !important;
+            background-color: <?= $golden ?>;
+        }
+
+        .alertify .ajs-dimmer {
+
+            transition-timing-function: ease-in;
+            transition-duration: 500ms !important;
+        }
+
+        .alertify .ajs-modal {
+
+            transition-timing-function: ease-out;
+            transition-duration: 500ms !important;
+        }
+
+        .newstyle:focus {
+            border-color: <?= $golden ?> !important;
+            /* outline: none !important; */
+            /* Remove the default outline */
+            box-shadow: 0 0 5px rgba(184, 133, 70, 0.7) !important;
+        }
     </style>
 </head>
 
@@ -99,42 +103,42 @@ display: none;
         <div class="flex-1 h-full max-w-4l mx-auto overflow-hidden bg-white rounded-lg shadow-xl dark:bg-gray-800">
             <div class="flex flex-col overflow-y-auto md:flex-row">
                 <div class="h-32 md:h-auto md:w-1/2">
-                    <img aria-hidden="true" class="object-cover w-full h-full dark:hidden" src="main/dist/img/login-register-side-img.png" alt="Office" />
-                    <img aria-hidden="true" class="hidden object-cover w-full h-full dark:block" src="main/dist/img/login-register-side-img.png" alt="Office" />
+                    <img aria-hidden="true" class="object-cover w-full h-full dark:hidden" src="main/dist/img/loginimage.jpg" alt="Office" style="object-fit: contain;" />
+                    <img aria-hidden="true" class="hidden object-cover w-full h-full dark:block" src="main/dist/img/loginimage.jpg" alt="Office" />
                 </div>
                 <div style="padding-left: 2rem; padding-right: 2rem;" class="items-center justify-center p-6 sm:p-12 md:w-1/2">
                     <form method="post" onsubmit="event.preventDefault();sendForm('', '', 'checklogin', 'resultid', 'loginform');return 0;" id="loginform">
                         <div class="w-full">
                             <h4 class="mb-4 text-l font-semibold text-gray-700 dark:text-gray-200">
-                                Login to PMS Equity
+                                Login to Star Fashion
                             </h4>
                             <label class="block text-sm">
                                 <span class="text-gray-700 dark:text-gray-400">Email</span>
-                                <input name="email" data-bvalidator='required' class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" placeholder="Enter your mail ID" />
+                                <input name="email" data-bvalidator='required' class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input newstyle" style="background-color: white !important;border-color:<?= $golden ?>" placeholder="Enter your mail ID" />
                             </label>
                             <label class="block mt-4 mb-2 text-sm" style="position:relative">
                                 <span class="text-gray-700 dark:text-gray-400">Password</span>
-                                <input name="password" data-bvalidator='required' id="pass" class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" placeholder="********" type="password" />
+                                <input name="password" data-bvalidator='required' id="pass" class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input newstyle" style="background-color: white !important;border-color:<?= $golden ?>" placeholder="********" type="password" />
                                 <i id="eye" class="fa fa-eye" style="position: absolute; top:38px; right:10px" aria-hidden="true"></i>
                             </label>
                             <label class="block mt-4 mb-2 text-sm" style="position:relative">
                                 <span class="text-gray-700 dark:text-gray-400">CAPTCHA</span>
                                 <img style="border-radius: 5px; border:1px #e2e8f0 " src="main/generateimage.php" alt="CAPTCHA">
-                                <input name="captcha" data-bvalidator='required' class="col-6 block mt-2 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" style="background-color: #e8f0fe !important;" placeholder="Enter Captcha" />
+                                <input name="captcha" data-bvalidator='required' class="col-6 block mt-2 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input newstyle" style="background-color: #e8f0fe !important;border-color:<?= $golden ?>" placeholder="Enter Captcha" />
                             </label>
                             <div id="resultid"></div>
                             <!-- You should use a button here, as the anchor is only used for the example  -->
-                            <button type="submit" class="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                            <button style="background-color: <?= $golden ?>;" type="submit" class="block w-full px-4 py-2 mt-4 text-sm font-medium leading-5 text-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
                                 Log in
                             </button>
 
                             <p class="mt-4">
-                                <a class="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline" href="./forgotpassword">
+                                <a style="color:<?= $golden ?>" class="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline" href="./forgotpassword">
                                     Forgot your password?
                                 </a>
                             </p>
                             <p class="mt-1">
-                                <a class="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline" href="register">
+                                <a style="color:<?= $golden ?>" class="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline" href="register">
                                     Create account
                                 </a>
                             </p>

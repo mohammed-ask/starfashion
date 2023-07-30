@@ -2,7 +2,7 @@
 <aside class="z-20 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0">
   <div class="py-4 text-gray-500 dark:text-gray-400">
     <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="https://starfashion.com/dashboard">
-      <img src="../main/images/logo/starimage.webp" style="margin-left: 25px; margin-top: -30px; margin-bottom: 20px; width:175px" alt="logo">
+      <img src="../main/dist/img/starfashion.png" style="margin-left: 25px; margin-top: -30px; margin-bottom: 20px; width:175px" alt="logo">
     </a>
 
     <ul>
@@ -74,7 +74,7 @@
             <span class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
               <i style="color: #057c7c;" class="fa-solid fa-user"></i>
             </span>
-            <span class="ml-3">Category Section</span>
+            <span class="ml-3">Product Section</span>
           </span>
           <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
@@ -115,6 +115,16 @@
             <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
               <a class="w-full" href="slides">
                 Slides
+              </a>
+            </li>
+            <?php //} 
+            ?>
+            <?php //if (in_array(14, $permissions)) { 
+            ?>
+
+            <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+              <a class="w-full" href="coupon">
+                Coupons
               </a>
             </li>
             <?php //} 
@@ -306,7 +316,7 @@
               <?php } ?>
               <?php if (in_array(17, $permissions)) { ?>
                 <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
-                  <a class="w-full" href="deliveryinformation">
+                  <a class="w-full" href="deliveryinfo">
                     Delivery Information
                   </a>
                 </li>

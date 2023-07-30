@@ -19,13 +19,13 @@
 <script src="main/dist/userjs/jquery.slicknav.js"></script>
 <script src="main/dist/userjs/mixitup.min.js"></script>
 <script src="main/dist/userjs/owl.carousel.min.js"></script>
-<script src="main/dist/userjs/main.js"></script>
+<script src="main/dist/userjs/main.js?ver=<?php echo date('His'); ?>"></script>
 
 <!-- jQuery UI 1.11.4 -->
 <script src="main/plugins/jquery-ui/jquery-ui.min.js"></script>
 <!-- <script src="main/dist/userjs/selectr.min.js"></script> -->
-<script src="main/dist/plugins/apex-chart/apexcharts.min.js"></script>
-<script src="main/dist/pages/market.init.js"></script>
+<!-- <script src="main/dist/plugins/apex-chart/apexcharts.min.js"></script>
+<script src="main/dist/pages/market.init.js"></script> -->
 <!-- App js -->
 <!-- <script src="main/dist/userjs/app.js"></script> -->
 <!-- <script>
@@ -89,6 +89,29 @@
 <script src="main/dist/js/jquery.bvalidator-yc.js"></script>
 <!--<script src="main/dist/js/bs3form.min.js"></script>-->
 <script src="main/dist/js/b3form.js"></script>
+<script>
+  const addmail = () => {
+    mail = $("#customermail").val()
+    $.post({
+      url: "main/insertmail.php",
+      data: {
+        mail: mail,
+      },
+      success: function(response) {
+        console.log(response)
+        if (response === 'Success') {
+          alertify.success('You are subscribed to out newsletter successfully');
+        } else if (response === 'Failed') {
+          alertify.error('Please enter proper mail ');
+        } else if (response === 'Empty') {
+          alertify.error('Oops! looks like you forgot to enter the mail ');
+        } else if (response === 'Found') {
+          alertify.error('Don\'t worry! you are already subscribed. ');
+        }
+      },
+    });
+  }
+</script>
 <?php
 if (isset($extrajs)) {
   echo $extrajs;

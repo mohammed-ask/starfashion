@@ -184,6 +184,22 @@ $row = $obj->fetch_assoc($result);
         <input xdata-bvalidator="required" class="form-control" value="<?= $row['net_price'] ?>" name="net_price">
     </label>
     <label class="block text-sm" style="margin-bottom: 5px;">
+        <span class="text-gray-700 dark:text-gray-400">GST Percent</span>
+        <select data-bvalidator="required" class="form-control select2" name="gstrate" id="gstrate">
+            <?php
+            $gst = $obj->selectextrawhereupdate("tax", "id,name", "status = 1");
+            $cat = mysqli_fetch_all($gst);
+            foreach ($cat as list($id, $name)) { ?>
+                <option value="<?php echo $id; ?>" <?= ($id == $row['gstrate']) ? 'selected' : '' ?>> <?php echo $name; ?></option>
+            <?php
+            } ?>
+        </select>
+    </label>
+    <label class="block text-sm" style="margin-bottom: 5px;">
+        <span class="text-gray-700 dark:text-gray-400">Net Price</span>
+        <input xdata-bvalidator="required" class="form-control" value="<?= $row['final_price'] ?>" name="final_price">
+    </label>
+    <label class="block text-sm" style="margin-bottom: 5px;">
         <span class="text-gray-700 dark:text-gray-400">Currency</span>
         <input xdata-bvalidator="required" class="form-control" value="<?= $row['currency'] ?>" name="currency">
     </label>
@@ -207,17 +223,14 @@ $row = $obj->fetch_assoc($result);
         <span class="text-gray-700 dark:text-gray-400">Damage Return</span>
         <textarea xdata-bvalidator="required" class="form-control" name="damage_return"><?= $row['damage_return'] ?></textarea>
     </label>
-
-    <label class="block text-sm" style="margin-bottom: 5px;">
-        <span class="text-gray-700 dark:text-gray-400">GST Percent</span>
-        <select data-bvalidator="required" class="form-control select2" name="gstrate">
-            <option value="0" <?= $row['gstrate'] === "0" ? "Selected" : "" ?>>0%</option>
-            <option value="5" <?= $row['gstrate'] === "5" ? "Selected" : "" ?>>5%</option>
-            <option value="12" <?= $row['gstrate'] === "12" ? "Selected" : "" ?>>12%</option>
-            <option value="18" <?= $row['gstrate'] === "18" ? "Selected" : "" ?>>18%</option>
-            <option value="28" <?= $row['gstrate'] === "28" ? "Selected" : "" ?>>28%</option>
+    <label class="block text-md">
+        <span class="text-gray-700 dark:text-gray-400">Stock Status</span>
+        <select data-bvalidator="required" class="form-control select2" name="stockstatus">
+            <option value="Available" <?= $row['stockstatus'] === "Available" ? "Selected" : "" ?>>Available</option>
+            <option value="Out of stock" <?= $row['stockstatus'] === "Out of stock" ? "Selected" : "" ?>>Out of stock</option>
+            <option value="Just a few left" <?= $row['stockstatus'] === "Just a few left" ? "Selected" : "" ?>>Just a few left</option>
         </select>
-    </label>
+    </label><br>
     <div>
         <button type="submit" id="modalsubmit" class="px-4 py-2  text-sm  bg-blue  rounded-lg hidden">Submit</button>
         <div id="resultid" class="form-result"></div>

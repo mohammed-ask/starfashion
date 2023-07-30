@@ -182,6 +182,22 @@ include "main/session.php";
         <input xdata-bvalidator="required" class="form-control" name="net_price">
     </label>
     <label class="block text-sm" style="margin-bottom: 5px;">
+        <span class="text-gray-700 dark:text-gray-400">GST Percent</span>
+        <select data-bvalidator="required" class="form-control select2" name="gstrate" id="gstrate">
+            <?php
+            $gst = $obj->selectextrawhereupdate("tax", "id,name", "status = 1");
+            $cat = mysqli_fetch_all($gst);
+            foreach ($cat as list($id, $name)) { ?>
+                <option value="<?php echo $id; ?>"> <?php echo $name; ?></option>
+            <?php
+            } ?>
+        </select>
+    </label>
+    <label class="block text-sm" style="margin-bottom: 5px;">
+        <span class="text-gray-700 dark:text-gray-400">Net Price</span>
+        <input xdata-bvalidator="required" class="form-control" name="final_price">
+    </label>
+    <label class="block text-sm" style="margin-bottom: 5px;">
         <span class="text-gray-700 dark:text-gray-400">Currency</span>
         <input xdata-bvalidator="required" class="form-control" name="currency">
     </label>
@@ -205,17 +221,15 @@ include "main/session.php";
         <span class="text-gray-700 dark:text-gray-400">Damage Return</span>
         <textarea xdata-bvalidator="required" class="form-control" name="damage_return"></textarea>
     </label>
-
-    <label class="block text-sm" style="margin-bottom: 5px;">
-        <span class="text-gray-700 dark:text-gray-400">GST Percent</span>
-        <select data-bvalidator="required" class="form-control select2" name="gstrate">
-            <option value="0">0%</option>
-            <option value="5">5%</option>
-            <option value="12">12%</option>
-            <option value="18">18%</option>
-            <option value="28">28%</option>
+    <label class="block text-md">
+        <span class="text-gray-700 dark:text-gray-400">Stock Status</span>
+        <select data-bvalidator="required" class="form-control select2" name="stockstatus">
+            <option value="Available">Available</option>
+            <option value="Out of stock">Out of stock</option>
+            <option value="Just a few left">Just a few left</option>
         </select>
-    </label>
+    </label><br>
+
     <label class="block text-sm" style="margin-bottom: 5px;">
         <span class="text-gray-700 dark:text-gray-400">More Images</span>
         <input xdata-bvalidator="required" multiple class="form-control" type="file" name="moreimage[]">

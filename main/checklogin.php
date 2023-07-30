@@ -12,7 +12,7 @@ include 'conn.php';
 $email = $_POST['email'];
 $pwd = $_POST['password'];
 $table = "users";
-$condition = " (`email` = '" . $email . "' ) and type = 2 and status != 99";
+$condition = " (`email` = '" . $email . "' ) and type = 'client' and status != 99";
 $result = $obj->selectextrawhereupdate($table, "*", $condition);
 $num = $obj->total_rows($result);
 if ($num) {
@@ -58,11 +58,7 @@ if ($num) {
                 $cookieData = json_encode($userData);
                 setcookie('userData', $cookieData, time() + (86400 * 30), '/');
                 $obj->insertnew('loginlog', $log);
-                if ($email === 'mohammedmaheswer12@gmail.com') {
-                    echo "Redirect : Logged in SuccessfullyURLhttps://dev-openapi.5paisa.com/WebVendorLogin/VLogin/Index?VendorKey=GN26BJxQ3LnyNJ5vCi8cJobynsIdMgSp&ResponseURL=$redirecturl/dashboard";
-                } else {
-                    echo "Redirect : Logged in SuccessfullyURLdashboard";
-                }
+                echo "Redirect : Logged in SuccessfullyURLindex";
             }
         } else {
             echo "Error : Password is incorrect.";

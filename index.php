@@ -81,9 +81,6 @@ switch ($request['path']) {
     case "$head/admin/users";
         require __DIR__ . '/main/admin/viewusers.php';
         break;
-    case "$head/admin/register";
-        require __DIR__ . '/main/admin/addusers.php';
-        break;
     case "$head/admin/adduser";
         require __DIR__ . '/main/admin/adduser.php';
         break;
@@ -350,6 +347,24 @@ switch ($request['path']) {
     case "$head/admin/deletepurchase";
         require __DIR__ . '/main/admin/deletepurchase.php';
         break;
+    case "$head/admin/coupon";
+        require __DIR__ . '/main/admin/viewcoupon.php';
+        break;
+    case "$head/admin/addcoupon";
+        require __DIR__ . '/main/admin/addcoupon.php';
+        break;
+    case "$head/admin/insertcoupon";
+        require __DIR__ . '/main/admin/insertcoupon.php';
+        break;
+    case "$head/admin/editcoupon";
+        require __DIR__ . '/main/admin/editcoupon.php';
+        break;
+    case "$head/admin/updatecoupon";
+        require __DIR__ . '/main/admin/updatecoupon.php';
+        break;
+    case "$head/admin/deletecoupon";
+        require __DIR__ . '/main/admin/deletecoupon.php';
+        break;
     case "$head/admin/viewfullpurchase";
         require __DIR__ . '/main/admin/viewfullpurchase.php';
         break;
@@ -370,9 +385,6 @@ switch ($request['path']) {
         break;
     case "$head/":
         require __DIR__ . '/main/index.php';
-        break;
-    case "$head/register";
-        require __DIR__ . '/main/addusers.php';
         break;
     case "$head/dummyregister":
         require __DIR__ . '/main/dummyregister.php';
@@ -421,6 +433,33 @@ switch ($request['path']) {
         break;
     case "$head/insertresetpassword";
         require __DIR__ . '/main/insertresetpassword.php';
+        break;
+    case "$head/info";
+        require __DIR__ . '/main/info.php';
+        break;
+    case "$head/register";
+        require __DIR__ . '/main/register.php';
+        break;
+    case "$head/contactus";
+        require __DIR__ . '/main/viewcontactus.php';
+        break;
+    case "$head/insertmessage";
+        require __DIR__ . '/main/insertmessage.php';
+        break;
+    case "$head/cart";
+        require __DIR__ . '/main/viewcart.php';
+        break;
+    case "$head/shop";
+        require __DIR__ . '/main/viewshop.php';
+        break;
+    case "$head/shopdetail";
+        require __DIR__ . '/main/viewshopdetail.php';
+        break;
+    case "$head/checkout";
+        require __DIR__ . '/main/viewcheckout.php';
+        break;
+    case "$head/faqs";
+        require __DIR__ . '/main/viewfaqs.php';
         break;
     default:
         http_response_code(404);

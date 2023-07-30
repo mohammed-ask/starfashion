@@ -53,6 +53,8 @@ date_default_timezone_set('Asia/Kolkata');
 /* object for db class in function.php $obj */
 $obj = new db($host, $database_Username, $database_Password, $database_Name, $port);
 
+// Colos
+include "colorconstants.php";
 // Main Settings
 $sendmailfrom = $platform === 'test'  ? "mohammedhusain559@gmail.com" : 'info@pmsequity.com';
 $sendemailpassword = $platform === 'test' ? "svcbitzquirlpwxk" : 'PMSEquity@1998';
@@ -92,23 +94,18 @@ $companypersonname = 'Mohammed Husain';
 $companygstno = $compdata["gst_no"];
 
 $requesttoken = '';
-$redirecturl = ($platform == "test") ?  "http://localhost/indiastock" : "https://pms-equity.com";
-if (isset($_GET['RequestToken'])) {
-    $requesttoken = $_GET['RequestToken'];
-}
-$marketopen = false;
+$redirecturl = ($platform == "test") ?  "http://localhost/indiastock" : "https://starfashion.com";
 $currencysymbol = '₹';
-// get current date and time
-$now = new DateTime();
-$dayOfWeek = $now->format('N');
-$hour = $now->format('G');
-if ($dayOfWeek >= 1 && $dayOfWeek <= 5) {
-    if ($hour >= 9 && $hour < 24) {
-        $marketopen = true;
-    }
+
+$userData = '';
+$customerid = '';
+$customername = '';
+if (isset($_COOKIE['userData'])) {
+    $userData = json_decode($_COOKIE['userData'], true);
+    $customerid = $userData['userid'];
+    $customername = $userData['username'];
 }
-$timeskip = ($platform == "test") ?  '+00:00' : '+12:30';
-$apiinterval = 4000;
+
 define("REQUEST_TOKEN", $requesttoken); //right
 define("APP_NAME", "5P51842644"); //right
 define("CLIENT_CODE", "51842644"); //right

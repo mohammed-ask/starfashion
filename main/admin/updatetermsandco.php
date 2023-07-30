@@ -1,6 +1,9 @@
 <?php
 include 'main/session.php';
 /* @var $obj db */
+// echo "<pre>";
+// print_r($_POST);
+// die;
 ob_start();
 $sid = $_POST['id'];
 $_POST['status'] = 1;

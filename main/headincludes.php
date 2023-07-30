@@ -31,21 +31,16 @@
  <link rel="stylesheet" href="main/dist/usercss/nice-select.css" type="text/css">
  <link rel="stylesheet" href="main/dist/usercss/owl.carousel.min.css" type="text/css">
  <link rel="stylesheet" href="main/dist/usercss/slicknav.min.css" type="text/css">
- <link rel="stylesheet" href="main/dist/usercss/style.css" type="text/css">
+ <link rel="stylesheet" href="main/dist/usercss/style.css?ver=<?php echo time(); ?>" type="text/css">
 
  <link href="main/dist/usercss/bootstrap.min.css" rel="stylesheet" type="text/css">
 
 
- <link href="main/dist/usercss/icons.min.css" rel="stylesheet" type="text/css">
+ <!-- <link href="main/dist/usercss/icons.min.css" rel="stylesheet" type="text/css"> -->
  <!-- <link href="main/dist/usercss/app.min.css" rel="stylesheet" type="text/css"> -->
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
  <!-- Google Font: Source Sans Pro -->
  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
- <!-- Font Awesome -->
- <link rel="stylesheet" href="main/plugins/fontawesome-free/css/all.min.css">
- <!-- Ionicons -->
- <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
  <!-- iCheck -->
  <link rel="stylesheet" href="main/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
  <!-- overlayScrollbars -->

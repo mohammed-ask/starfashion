@@ -1,3 +1,17 @@
+<?php
+$carttotal = 0.00;
+if (!empty($customerid)) {
+    $pids = $obj->selectfieldwhere("cart", "group_concat(productid)", "userid=" . $customerid . " and status = 1");
+    if (!empty($pids)) {
+        $carttotal = $obj->selectfieldwhere("cart inner join products on products.id = cart.productid", "sum(final_price)", "products.id in ($pids) and cart.status = 1 and products.isactive='Yes' and products.status=1");
+    }
+} elseif (isset($_COOKIE['cartData'])) {
+    $CartData = json_decode($_COOKIE['cartData'], true);
+    foreach ($CartData as $data) {
+        $carttotal += $obj->selectfieldwhere("products", "final_price", "id=" . $data['productid'] . " and status = 1 and isactive='Yes'");
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -83,6 +97,36 @@
     .slider.round:before {
         border-radius: 50%;
     }
+
+    a {
+        text-decoration: none !important;
+    }
+
+    .anchorstyle:hover {
+        color: white !important;
+    }
+
+    .menu {
+        display: none;
+        position: absolute;
+        top: 40px;
+        right: 10px;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 999;
+
+    }
+
+    .menu a {
+        display: block;
+        padding: 10px;
+        color: #333;
+        text-decoration: none;
+    }
+
+    .menu a:hover {
+        background-color: #f1f1f1;
+    }
 </style>
 
 <body>
@@ -96,27 +140,37 @@
     <div class="offcanvas-menu-wrapper">
         <div class="offcanvas__option">
             <div class="offcanvas__links">
-                <a href="#">Sign in</a>
-                <a href="#">FAQs</a>
+                <?php if (!empty($customerid)) { ?>
+                    <div class="header__top__hover">
+                        <span style="color:black"><?= $customername ?> <i class="arrow_carrot-down"></i></span>
+                        <ul>
+                            <li class="m-2"><i class="fa fa-user"></i><a style="color:black;margin-left:5px" href="#">Profile</a></li>
+                            <li class="m-2"><i class="fa fa-sign-out"></i><a style="color:black" href="logout">Logout</a></li>
+                        </ul>
+                    </div>
+                <?php } else { ?>
+                    <a class="anchorstyle" href="login">Sign in</a>
+                <?php } ?>
+                <a href="faqs">FAQs</a>
             </div>
-            <div class="offcanvas__top__hover">
+            <!-- <div class="offcanvas__top__hover">
                 <span>Usd <i class="arrow_carrot-down"></i></span>
                 <ul>
                     <li>USD</li>
                     <li>EUR</li>
                     <li>USD</li>
                 </ul>
-            </div>
+            </div> -->
         </div>
         <div class="offcanvas__nav__option">
             <a href="#" class="search-switch"><img src="main/dist/img/icon/search.png" alt=""></a>
-            <a href="#"><img src="main/dist/img/icon/heart.png" alt=""></a>
-            <a href="#"><img src="main/dist/img/icon/cart.png" alt=""> <span>0</span></a>
-            <div class="price">$0.00</div>
+            <!-- <a href="#"><img src="main/dist/img/icon/heart.png" alt=""></a> -->
+            <a href="cart"><img src="main/dist/img/icon/cart.png" alt=""> <span>0</span></a>
+            <div class="price"><?= $currencysymbol ?><?= number_format($carttotal, 2) ?></div>
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__text">
-            <p>Free shipping, 30-day return or refund guarantee.</p>
+            <p>Free shipping, 6-day return or refund guarantee.</p>
         </div>
     </div>
     <!-- Offcanvas Menu End -->
