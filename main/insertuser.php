@@ -64,6 +64,7 @@ if ($_SESSION['otp'] != $_POST['otp']) {
         $x['address'] = $_POST['address'] . ' ' . $_POST['address2'];
         $x['zip'] = $_POST['zip'];
         $x['city'] = $_POST['city'];
+        $x['state'] = $obj->selectfieldwhere("state_list", "state", "id=" . $_POST['ship_state'] . "");
         $x['type'] = 'client';
         $x['role'] = 2;
         $userid = $obj->insertnew($tb_name, $x);
@@ -73,6 +74,7 @@ if ($_SESSION['otp'] != $_POST['otp']) {
         $jk['ship_adress2'] = $_POST['address2'];
         $jk['ship_zip_code'] = $_POST['zip'];
         $jk['ship_city'] = $_POST['city'];
+        $jk['ship_state'] = $_POST['ship_state'];
         $jk['ship_contact_phone'] = $_POST['mobileno'];
         $jk['added_on'] = date("Y-m-d H:i:s");
         $jk['added_by'] = 0;

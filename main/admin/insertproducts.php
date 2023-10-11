@@ -2,7 +2,7 @@
 include "main/session.php";
 /* @var $obj db */
 // echo "<pre>";
-// print_r($_FILES['moreimage']);
+// print_r($_POST);
 // die;
 ob_start();
 $path = "main/uploads/category";
@@ -32,10 +32,10 @@ $xx["occasions"] = implode(",", $_POST["occasions"]);;
 $xx["material_used"] = $_POST["material_used"];
 $xx["size"] = implode(",", $_POST["size"]);
 $xx["color"] = $_POST["color"];
-$xx["width"] = $_POST["width"];
-$xx["height"] = $_POST["height"];
-$xx["length"] = $_POST["length"];
-$xx["width_height_length_unit"] = $_POST["width_height_length_unit"];
+// $xx["width"] = $_POST["width"];
+// $xx["height"] = $_POST["height"];
+// $xx["length"] = $_POST["length"];
+// $xx["width_height_length_unit"] = $_POST["width_height_length_unit"];
 $xx["weight"] = $_POST["weight"];
 $xx["weight_unit"] = $_POST["weight_unit"];
 $xx["price"] = $_POST["price"];
@@ -73,6 +73,23 @@ if (!empty($_FILES["moreimage"]["name"])) {
         $pradin = $obj->insertnew($tb_name, $postdata);
     }
 }
+
+foreach ($_POST["sizename"] as $key => $value) {
+    $yy['added_on'] = date('Y-m-d H:i:s');
+    $yy['added_by'] = $employeeid;
+    $yy['updated_on'] = date('Y-m-d H:i:s');
+    $yy['updated_by'] = $employeeid;
+    $yy['status'] = 1;
+    $yy['sizename'] = $value;
+    $yy['length'] = $_POST['length'][$key];
+    $yy['height'] = $_POST['height'][$key];
+    $yy['width'] = $_POST['width'][$key];
+    $yy['unit'] = $_POST['unit'][$key];
+    $yy['productid'] = $productid;
+    $tb_name = "sizedetail";
+    $pradin = $obj->insertnew($tb_name, $yy);
+}
+die;
 if (is_integer($pradin) && $pradin > 0) {
     echo "Redirect : New Category has been Added  URLproducts";
 } else {

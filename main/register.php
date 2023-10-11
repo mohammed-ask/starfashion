@@ -815,6 +815,19 @@ include "conn.php" ?>
                                     <input type="text" id="adharno" name="address2" placeholder="Apartment, suite, unite etc (optional)" required require>
                                     <span></span>
                                 </div>
+                                <div class="input-div">
+                                    <select data-bvalidator="required" class="form-control" required require name="ship_state" id="ship_state">
+                                        <option value="">Select State</option>
+                                        <?php
+                                        $state = $obj->selectextrawhereupdate("state_list", "id,state", "status = 1");
+                                        $ct = mysqli_fetch_all($state);
+                                        foreach ($ct as list($id, $name)) { ?>
+                                            <option value="<?php echo $id; ?>"> <?php echo $name; ?></option>
+                                        <?php
+                                        } ?>
+                                    </select>
+                                    <span></span>
+                                </div>
                             </div>
 
                             <div class="input-text">

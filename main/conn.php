@@ -92,6 +92,7 @@ $qrimage = $obj->fetchattachment($compdata['paymentqr']);
 $upiid = $compdata['upiid'];
 $companypersonname = 'Mohammed Husain';
 $companygstno = $compdata["gst_no"];
+$compstatecode = $obj->selectfieldwhere('state_list', 'gst_code', 'id=' . $compdata['indian_state'] . '');
 
 $requesttoken = '';
 $redirecturl = ($platform == "test") ?  "http://localhost/indiastock" : "https://starfashion.com";
@@ -105,19 +106,3 @@ if (isset($_COOKIE['userData'])) {
     $customerid = $userData['userid'];
     $customername = $userData['username'];
 }
-
-define("REQUEST_TOKEN", $requesttoken); //right
-define("APP_NAME", "5P51842644"); //right
-define("CLIENT_CODE", "51842644"); //right
-define("APP_VERSION", "1.0"); //right
-define("KEY", "GN26BJxQ3LnyNJ5vCi8cJobynsIdMgSp"); //right
-define("OS_NAME", "WEB"); //right
-define("USER_ID", "E1k4ZqoZzfz"); //right
-define("PASSWORD", "BYcnrCZnKPV"); //right
-
-// Market API Details
-define("APP_NAME2", "5P50439284"); //right
-define("CLIENT_CODE2", "50439284"); //right
-define("KEY2", "51uZHJivBrXpGMo3t8ECLW11GbyOlEsK"); //right
-define("USER_ID2", "AZQ6KXRzw5A"); //right
-define("PASSWORD2", "UNfA3hnLH4u"); //right

@@ -5,8 +5,9 @@ $cartdata = [];
 $subtotal = 0;
 $total = 0;
 if (!empty($customerid)) {
-    $cartdata = $obj->selectextrawhereupdate("cart inner join products on products.id = cart.productid ", "products.id,products.file_products,products.product_name,products.final_price", "userid=" . $customerid . " and cart.status = 1 and products.isactive='Yes'");
+    $cartdata = $obj->selectextrawhereupdate("cart inner join products on products.id = cart.productid ", "products.id,products.file_products,products.product_name,products.final_price,cart.size", "userid=" . $customerid . " and cart.status = 1 and products.isactive='Yes'");
     $subtotal = $obj->selectfieldwhere("cart inner join products on products.id = cart.productid ", "sum(final_price)", "userid=" . $customerid . " and cart.status = 1 and products.isactive='Yes' and products.status = 1");
+    $subtotal = empty($subtotal) ? 0 : $subtotal;
     $total = $subtotal;
 } else {
     $cookiecart = json_decode($_COOKIE['cartData'], true);
@@ -44,86 +45,98 @@ ob_start()
 <!-- Shopping Cart Section Begin -->
 <section class="shopping-cart spad">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="shopping__cart__table">
-                    <table id="products">
-                        <thead>
-                            <tr>
-                                <th>Product</th>
-                                <th>Quantity</th>
-                                <th>Total</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            if ((empty($customerid) && !empty($cartdata)) || $cartdata->num_rows > 0) {
-                                while ($rowcartdata = $obj->fetch_assoc($cartdata)) { ?>
-                                    <tr class="cartitems">
-                                        <td class="product__cart__item">
-                                            <div class="product__cart__item__pic">
-                                                <img style="height: 100px;width:100px" src="<?= $obj->fetchattachment($rowcartdata['file_products']) ?>" alt="">
-                                            </div>
-                                            <div class="product__cart__item__text">
-                                                <h6><?= $rowcartdata['product_name'] ?></h6>
-                                                <h5><?= $currencysymbol . $rowcartdata['final_price'] ?></h5>
-                                            </div>
-                                        </td>
-                                        <td class="quantity__item">
-                                            <div class="quantity">
-                                                <div class="pro-qty-2">
-                                                    <input class="pqty" type="text" value="1">
-                                                </div>
-                                                <input hidden class="pprice" type="text" value="<?= $rowcartdata['final_price'] ?>">
-                                            </div>
-                                        </td>
-                                        <td class="cart__price"><?= $currencysymbol . $rowcartdata['final_price'] ?></td>
-                                        <td class="cart__close"><i style="cursor:pointer" onclick="removecart('<?= $rowcartdata['id'] ?>')" class="fa fa-close"></i></td>
-                                    </tr>
-                                <?php }
-                            } else { ?>
+        <form action="checkout" method="post">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="shopping__cart__table">
+                        <table id="products">
+                            <thead>
                                 <tr>
-                                    <td colspan="3" style="text-align: center;">
-                                        <img style="height:100px;" src="main/dist/img/lonelycart.jpg" />
-                                        <em>
-                                            Your cart is feeling a bit lonely. Let's add some items to keep it company!</em>
-                                    <?php } ?>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-6">
-                        <div class="continue__btn">
-                            <a href="shop">Continue Shopping</a>
-                        </div>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                if ((empty($customerid) && !empty($cartdata)) || $cartdata->num_rows > 0) {
+                                    while ($rowcartdata = $obj->fetch_assoc($cartdata)) { ?>
+                                        <tr class="cartitems">
+                                            <td class="product__cart__item">
+                                                <div onclick="window.location.href='shopdetail?hakuna=<?= $rowcartdata['id'] ?>'" style="cursor:pointer" class="product__cart__item__pic">
+                                                    <img style="height: 100px;width:100px" src="<?= $obj->fetchattachment($rowcartdata['file_products']) ?>" alt="">
+                                                </div>
+                                                <div class="product__cart__item__text">
+                                                    <h6><?= $rowcartdata['product_name'] ?></h6>
+                                                    <h5><?= $currencysymbol . $rowcartdata['final_price'] ?></h5>
+                                                    <h6>Size - (<?= !empty($customerid) ? $rowcartdata['size'] : 'M' ?>)</h6>
+                                                </div>
+                                            </td>
+                                            <td class="quantity__item">
+                                                <div class="quantity">
+                                                    <div class="pro-qty-2">
+                                                        <input name="pqty[]" class="pqty" type="text" value="1">
+                                                    </div>
+                                                    <input name="productid[]" hidden class="pid" type="text" value="<?= $rowcartdata['id'] ?>">
+                                                    <input name="size[]" hidden class="pid" type="text" value="<?= $rowcartdata['size'] ?>">
+                                                    <input name="pprice[]" hidden class="pprice" type="text" value="<?= $rowcartdata['final_price'] ?>">
+                                                </div>
+                                            </td>
+                                            <td class="cart__price"><?= $currencysymbol . $rowcartdata['final_price'] ?></td>
+                                            <td class="cart__close"><i style="cursor:pointer" onclick="removecart('<?= $rowcartdata['id'] ?>')" class="fa fa-close"></i></td>
+                                        </tr>
+                                    <?php }
+                                } else { ?>
+                                    <tr>
+                                        <td colspan="3" style="text-align: center;">
+                                            <img style="height:100px;" src="main/dist/img/lonelycart.jpg" />
+                                            <em>
+                                                Your cart is feeling a bit lonely. Let's add some items to keep it company!</em>
+                                        <?php } ?>
+                            </tbody>
+                        </table>
                     </div>
-                    <!-- <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="continue__btn">
+                                <a href="shop">Continue Shopping</a>
+                            </div>
+                        </div>
+                        <!-- <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="continue__btn update__btn">
                             <a href="#"><i class="fa fa-spinner"></i> Update cart</a>
                         </div>
                     </div> -->
+                    </div>
+                </div>
+                <div class="col-lg-4 totalsection">
+                    <div class="cart__discount">
+                        <h6>Discount codes</h6>
+                        <!-- <form action="#"> -->
+                        <div>
+                            <input type="text" class="couponname" placeholder="Coupon code">
+                            <button onclick="event.preventDefault();applycoupon()">Apply</button>
+                        </div>
+                        <!-- </form> -->
+                    </div>
+                    <div class="cart__total">
+                        <h6>Cart total</h6>
+                        <ul>
+                            <li>Subtotal <span id="subtotal"><?= $currencysymbol . number_format($subtotal, 2) ?></span></li>
+                            <input hidden class="coupondiscount" name="coupondiscount" type="text" value="<?= 0 ?>">
+                            <input hidden name="subtotal" id="subtotalinput" type="text" value="<?= $subtotal ?>">
+                            <input hidden name="finaltotal" id="finaltotalinput" type="text" value="<?= $total ?>">
+                            <li>Total <span id="finaltotal"><?= $currencysymbol . number_format($total, 2) ?></span></li>
+                        </ul>
+                        <?php
+                        if ($subtotal > 0) { ?>
+                            <button type="submit" class="primary-btn">Proceed to checkout</button>
+                        <?php } ?>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-4 totalsection">
-                <div class="cart__discount">
-                    <h6>Discount codes</h6>
-                    <form action="#">
-                        <input type="text" class="couponname" placeholder="Coupon code">
-                        <button onclick="event.preventDefault();applycoupon()">Apply</button>
-                    </form>
-                </div>
-                <div class="cart__total">
-                    <h6>Cart total</h6>
-                    <ul>
-                        <li>Subtotal <span id="subtotal"><?= $currencysymbol . number_format($subtotal, 2) ?></span></li>
-                        <input hidden class="coupondiscount" type="text" value="<?= 0 ?>">
-                        <li>Total <span id="finaltotal"><?= $currencysymbol . number_format($total, 2) ?></span></li>
-                    </ul>
-                    <a href="checkout" class="primary-btn">Proceed to checkout</a>
-                </div>
-            </div>
-        </div>
+        </form>
     </div>
 </section>
 <!-- Shopping Cart Section End -->
@@ -170,8 +183,11 @@ include "main/templete.php";
                     alertify.error('It appears the coupon code you provided is not valid. Feel free to try again or contact our support team for assistance.')
                 } else if (response === 'Not Valid') {
                     alertify.error('Oops! Your order total doesn\'t meet the minimum amount required for this coupon. Please add more items to your cart and enjoy the discount.')
+                } else if (response === 'Used') {
+                    alertify.error('Oops! Coupon has already been used.')
                 } else {
                     amountsection.html(response);
+                    alertify.success('Coupon successfully applied')
                 }
             },
         });
@@ -194,6 +210,7 @@ include "main/templete.php";
         percent = $('.couponpercent').val()
         console.log(cdiscount, 'cd', percent, coupontype)
         $('#subtotal').html('<?= $currencysymbol ?>' + total.toFixed(2))
+        $('#subtotalinput').val(total.toFixed(2))
         if (coupontype === 'Percent') {
             discount = total * percent / 100
             total = total - discount
@@ -203,6 +220,7 @@ include "main/templete.php";
         }
         $('.discountamt').html('<?= $currencysymbol ?>' + discount.toFixed(2))
         $('#finaltotal').html('<?= $currencysymbol ?>' + total.toFixed(2))
+        $('#finaltotalinput').val(total.toFixed(2))
 
     }
 </script>

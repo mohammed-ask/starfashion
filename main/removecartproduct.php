@@ -20,9 +20,10 @@ if (!empty($_POST['userid'])) {
                 <td class="quantity__item">
                     <div class="quantity">
                         <div class="pro-qty-2">
-                            <input class="pqty" type="text" value="1">
+                            <input name="pqty[]" class="pqty" type="text" value="1">
                         </div>
-                        <input hidden class="pprice" type="text" value="<?= $rowcartdata['final_price'] ?>">
+                        <input name="productid[]" hidden class="pid" type="text" value="<?= $rowcartdata['id'] ?>">
+                        <input name="pprice[]" hidden class="pprice" type="text" value="<?= $rowcartdata['final_price'] ?>">
                     </div>
                 </td>
                 <td class="cart__price"><?= $currencysymbol . $rowcartdata['final_price'] ?></td>

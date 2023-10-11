@@ -20,19 +20,7 @@ include "main/session.php";
             <option value="Hot-Sales">Hot Sales</option>
         </select>
     </label>
-    <label class="block text-md">
-        <span class="text-gray-700 dark:text-gray-400">Size</span>
-        <select data-bvalidator="required" class="form-control" name="size[]" multiple>
-            <option value="Any">Any</option>
-            <option value="Free Size">Free Size</option>
-            <option value="S">S</option>
-            <option value="M">M</option>
-            <option value="L">L</option>
-            <option value="XL">XL</option>
-            <option value="XXl">XXl</option>
-            <option value="XXXl">XXXl</option>
-        </select>
-    </label><br>
+
     <label class="block text-md" style="margin-bottom: 5px;">
         <span class="text-gray-700 dark:text-gray-400">Category</span>
         <select data-bvalidator="required" class="form-control select2" name="category_id" id="categoryid">
@@ -68,7 +56,8 @@ include "main/session.php";
     </label>
     <label class="block text-sm" style="margin-bottom: 5px;">
         <span class="text-gray-700 dark:text-gray-400">Description</span>
-        <input xdata-bvalidator="required" class="form-control" name="description">
+        <textarea style="height: 300px;" name="description" id="summernote" class="block w-full  text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" placeholder=""></textarea>
+        <!-- <input xdata-bvalidator="required" class="form-control" name="description"> -->
     </label>
     <label class="block text-sm" style="margin-bottom: 5px;">
         <span class="text-gray-700 dark:text-gray-400">Is Active</span>
@@ -118,7 +107,7 @@ include "main/session.php";
     </label><br>
     <label class="block text-sm" style="margin-bottom: 5px;">
         <span class="text-gray-700 dark:text-gray-400">Occasions</span>
-        <select data-bvalidator="required" class="form-control" name="occasions[]" id="occasions" multiple>
+        <select xdata-bvalidator="required" class="form-control" name="occasions[]" id="occasions" multiple>
             <?php
             $category = $obj->selectextrawhereupdate("occasion", "id,name", "status = 1");
             $cat = mysqli_fetch_all($category);
@@ -146,18 +135,48 @@ include "main/session.php";
             <option value="GREEN">GREEN</option>
         </select>
     </label><br>
+    <label class="block text-md">
+        <span class="text-gray-700 dark:text-gray-400">Size</span>
+        <select data-bvalidator="required" class="form-control" name="size[]" multiple>
+            <option value="Any">Any</option>
+            <option value="Free Size">Free Size</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+            <option value="XXl">XXl</option>
+            <option value="XXXl">XXXl</option>
+        </select>
+    </label><br>
     <label class="block text-sm" style="margin-bottom: 5px;">
         <span class="text-gray-700 dark:text-gray-400">Width x Height x Length</span>
-        <div class="row ml-1 mr-1">
-            <input type="number" step="any" placeholder="Width" xdata-bvalidator="required" class="form-control col-sm-4" name="width">
-            <input type="number" step="any" placeholder="Height" xdata-bvalidator="required" class="form-control col-sm-4" name="height">
-            <input type="number" step="any" placeholder="Length" xdata-bvalidator="required" class="form-control col-sm-4" name="length">
-            <select data-bvalidator="required" class="form-control select2 col-sm-3" name="width_height_length_unit">
-                <option value="Meter">Meter</option>
-                <option value="Feet">Feet</option>
-                <option value="CM">CM</option>
-            </select>
+        <div class="sizedata">
+            <div class="row ml-1 mr-1 mb-4">
+                <input type="number" step="any" placeholder="Width" xdata-bvalidator="required" class="form-control col-sm-4" name="width[]">
+                <input type="number" step="any" placeholder="Height" xdata-bvalidator="required" class="form-control col-sm-4" name="height[]">
+                <input type="number" step="any" placeholder="Length" xdata-bvalidator="required" class="form-control col-sm-4" name="length[]">
+                <select data-bvalidator="required" class="form-control select2 col-sm-3" name="unit[]">
+                    <option value="Meter">Meter</option>
+                    <option value="Feet">Feet</option>
+                    <option value="CM">CM</option>
+                </select>
+                <!-- <label class="block text-md"> -->
+                <!-- <span class="text-gray-700 dark:text-gray-400">Size</span> -->
+                <select data-bvalidator="required" class="form-control select2" name="sizename[]">
+                    <!-- <option value="Any">Any</option> -->
+                    <!-- <option value="Free Size">Free Size</option> -->
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                    <option value="XXl">XXl</option>
+                    <option value="XXXl">XXXl</option>
+                </select>
+                <!-- </label><br> -->
+            </div>
         </div>
+        <button onclick="event.preventDefault();addsizes()" class="px-4 py-2  text-sm  bg-blue  rounded-lg">Add Size</button>
+
     </label>
     <label class="block text-sm" style="margin-bottom: 5px;">
         <span class="text-gray-700 dark:text-gray-400">Weight</span>
@@ -261,4 +280,7 @@ include "main/session.php";
     $(".select2").select2({
         minimumResultsForSearch: -1
     })
+    $(document).ready(function() {
+        $('#summernote').summernote();
+    });
 </script>

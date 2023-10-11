@@ -1,14 +1,41 @@
 <?php
 include './main/function.php';
 include './main/conn.php';
-if (isset($_POST['hakuna'])) {
-    // echo $_POST['hakuna'];
-}
+$rowproduct = $obj->selectextrawhere('products', "id=" . $_GET['hakuna'] . "")->fetch_assoc();
+$images = $obj->selectextrawhere('products_images', "productid=" . $_GET['hakuna'] . "");
+$otherproducts = $obj->selectextrawhere("products", "category_id =" . $rowproduct['category_id'] . " and status =1 and isactive ='Yes' and id != " . $_GET['hakuna'] . " order by id desc limit 4");
+$reviews = $obj->selectextrawhere('review', "productid=" . $_GET['hakuna'] . " and status = 1");
 // $tablename = $_GET['hakuna'];
 // $content = $obj->selectfieldwhere($tablename, 'content', 'status =1');
 ob_flush();
 ob_start()
 ?>
+<style>
+    .ratings {
+        display: flex;
+        justify-content: center;
+        flex-direction: row-reverse;
+    }
+
+    .ratings input {
+        display: none;
+    }
+
+    .ratings label {
+        cursor: pointer;
+        font-size: 25px;
+        margin: 0 5px;
+    }
+
+    .ratings label:before {
+        content: "\2605";
+    }
+
+    .ratings input:checked~label:before {
+        content: "\2605";
+        color: gold;
+    }
+</style>
 <!-- Shop Details Section Begin -->
 <section class="shop-details">
     <div class="product__details__pic">
@@ -27,54 +54,56 @@ ob_start()
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">
-                                <div class="product__thumb__pic set-bg" data-setbg="img/shop-details/thumb-1.png">
+                                <div class="product__thumb__pic set-bg" data-setbg="<?= $obj->fetchattachment($rowproduct['file_products']) ?>">
                                 </div>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">
-                                <div class="product__thumb__pic set-bg" data-setbg="img/shop-details/thumb-2.png">
-                                </div>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">
-                                <div class="product__thumb__pic set-bg" data-setbg="img/shop-details/thumb-3.png">
-                                </div>
-                            </a>
-                        </li>
+                        <?php
+                        $i = 2;
+                        while ($rowimage = $obj->fetch_assoc($images)) { ?>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tabs-<?= $i ?>" role="tab">
+                                    <div class="product__thumb__pic set-bg" data-setbg="<?= $obj->fetchattachment($rowproduct['file_products']) ?>">
+                                    </div>
+                                </a>
+                            </li>
+                        <?php $i++;
+                        } ?>
+                        <!--
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">
                                 <div class="product__thumb__pic set-bg" data-setbg="img/shop-details/thumb-4.png">
                                     <i class="fa fa-play"></i>
                                 </div>
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
                 <div class="col-lg-6 col-md-9">
                     <div class="tab-content">
                         <div class="tab-pane active" id="tabs-1" role="tabpanel">
                             <div class="product__details__pic__item">
-                                <img src="img/shop-details/product-big-2.png" alt="">
+                                <img src="<?= $obj->fetchattachment($rowproduct['file_products']) ?>" alt="">
                             </div>
                         </div>
-                        <div class="tab-pane" id="tabs-2" role="tabpanel">
-                            <div class="product__details__pic__item">
-                                <img src="img/shop-details/product-big-3.png" alt="">
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="tabs-3" role="tabpanel">
-                            <div class="product__details__pic__item">
-                                <img src="img/shop-details/product-big.png" alt="">
-                            </div>
-                        </div>
+                        <?php
+                        $i = 2;
+                        while ($rowimage = $obj->fetch_assoc($images)) { ?>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tabs-<?= $i ?>" role="tab">
+                                    <div class="product__thumb__pic set-bg" data-setbg="<?= $obj->fetchattachment($rowproduct['file_products']) ?>">
+                                    </div>
+                                </a>
+                            </li>
+                        <?php $i++;
+                        } ?>
+                        <!-- 
                         <div class="tab-pane" id="tabs-4" role="tabpanel">
                             <div class="product__details__pic__item">
                                 <img src="img/shop-details/product-big-4.png" alt="">
                                 <a href="https://www.youtube.com/watch?v=8PJ3_p7VqHw&list=RD8PJ3_p7VqHw&start_radio=1" class="video-popup"><i class="fa fa-play"></i></a>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -85,36 +114,44 @@ ob_start()
             <div class="row d-flex justify-content-center">
                 <div class="col-lg-8">
                     <div class="product__details__text">
-                        <h4>Hooded thermal anorak</h4>
+                        <h4><?= $rowproduct['product_name'] ?></h4>
+                        <?php
+                        $totalreview = $obj->selectfieldwhere("review", "count(id)", "status = 1 and productid= " . $_GET['hakuna'] . "");
+                        $totalrating =  $obj->selectfieldwhere("review", "sum(rating)", "status = 1  and productid= " . $_GET['hakuna'] . "");
+                        if ($totalreview > 0) {
+                            $avgrat = $totalrating / $totalreview;
+                        } else {
+                            $avgrat = 0;
+                        }
+                        ?>
                         <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-o"></i>
-                            <span> - 5 Reviews</span>
+                            <?php
+                            for ($i = 1; $i <= 5; $i++) {
+                                if ($i <= ceil($avgrat)) { ?>
+                                    <i style="color:gold" class="fa fa-star"></i>
+                                <?php } else { ?>
+                                    <i class="fa fa-star-o"></i>
+                            <?php }
+                            } ?>
+                            <span> - <?= $totalreview ?> Reviews</span>
                         </div>
-                        <h3>$270.00 <span>70.00</span></h3>
-                        <p>Coat with quilted lining and an adjustable hood. Featuring long sleeves with adjustable
-                            cuff tabs, adjustable asymmetric hem with elastic side tabs and a front zip fastening
-                            with placket.</p>
+                        <h3><?= $currencysymbol . $rowproduct['final_price'] ?> <span><?= $rowproduct['final_price'] < $rowproduct['price'] ? $rowproduct['price'] : '' ?></span></h3>
+                        <p><?= $rowproduct['description'] ?></p>
                         <div class="product__details__option">
                             <div class="product__details__option__size">
                                 <span>Size:</span>
-                                <label for="xxl">xxl
-                                    <input type="radio" id="xxl">
-                                </label>
-                                <label class="active" for="xl">xl
-                                    <input type="radio" id="xl">
-                                </label>
-                                <label for="l">l
-                                    <input type="radio" id="l">
-                                </label>
-                                <label for="sm">s
-                                    <input type="radio" id="sm">
-                                </label>
+                                <?php
+                                foreach (explode(",", $rowproduct['size']) as $data) { ?>
+
+                                    <label for="<?= $data ?>"><?= $data ?>
+                                        <input name="size" value="<?= $data ?>" type="radio" id="<?= $data ?>">
+                                    </label>
+                                <?php } ?>
                             </div>
-                            <div class="product__details__option__color">
+                            <div id="sizedetail">
+
+                            </div>
+                            <!-- <div class="product__details__option__color">
                                 <span>Color:</span>
                                 <label class="c-1" for="sp-1">
                                     <input type="radio" id="sp-1">
@@ -131,7 +168,7 @@ ob_start()
                                 <label class="c-9" for="sp-9">
                                     <input type="radio" id="sp-9">
                                 </label>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="product__details__cart__option">
                             <div class="quantity">
@@ -139,19 +176,26 @@ ob_start()
                                     <input type="text" value="1">
                                 </div>
                             </div>
-                            <a href="#" class="primary-btn">add to cart</a>
+                            <?php
+                            $customerid = empty($customerid) ? 0 : $customerid;
+                            $chkcart = $obj->selectfieldwhere("cart", 'count(id)', "productid=" . $_GET['hakuna'] . " and userid= " . $customerid . " ");
+                            if (empty($chkcart) || $chkcart === 0) { ?>
+                                <a style="color:white;cursor:pointer" onclick="addcart(<?= $rowproduct['id'] ?>)" class="primary-btn">add to cart</a>
+                            <?php } else { ?>
+                                <a style="color:white" onclick="addcart(<?= $rowproduct['id'] ?>)" class="primary-btn">Added to cart</a>
+                            <?php } ?>
                         </div>
-                        <div class="product__details__btns__option">
+                        <!-- <div class="product__details__btns__option">
                             <a href="#"><i class="fa fa-heart"></i> add to wishlist</a>
                             <a href="#"><i class="fa fa-exchange"></i> Add To Compare</a>
-                        </div>
+                        </div> -->
                         <div class="product__details__last__option">
                             <h5><span>Guaranteed Safe Checkout</span></h5>
                             <img src="img/shop-details/details-payment.png" alt="">
                             <ul>
-                                <li><span>SKU:</span> 3812912</li>
-                                <li><span>Categories:</span> Clothes</li>
-                                <li><span>Tag:</span> Clothes, Skin, Body</li>
+                                <li><span>SKU:</span> <?= $rowproduct['sku'] ?></li>
+                                <li><span>Categories:</span><?= $rowproduct['category_txt'] ?></li>
+                                <!-- <li><span>Tag:</span> Clothes, Skin, Body</li> -->
                             </ul>
                         </div>
                     </div>
@@ -166,112 +210,91 @@ ob_start()
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">Customer
-                                    Previews(5)</a>
+                                    Previews(<?= $obj->selectfieldwhere('review', 'count(id)', "productid=" . $_GET['hakuna'] . " and status = 1"); ?>)</a>
                             </li>
-                            <li class="nav-item">
+                            <!-- <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#tabs-7" role="tab">Additional
                                     information</a>
-                            </li>
+                            </li> -->
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="tabs-5" role="tabpanel">
                                 <div class="product__details__tab__content">
-                                    <p class="note">Nam tempus turpis at metus scelerisque placerat nulla deumantos
-                                        solicitud felis. Pellentesque diam dolor, elementum etos lobortis des mollis
-                                        ut risus. Sedcus faucibus an sullamcorper mattis drostique des commodo
-                                        pharetras loremos.</p>
-                                    <div class="product__details__tab__content__item">
-                                        <h5>Products Infomation</h5>
-                                        <p>A Pocket PC is a handheld computer, which features many of the same
-                                            capabilities as a modern PC. These handy little devices allow
-                                            individuals to retrieve and store e-mail messages, create a contact
-                                            file, coordinate appointments, surf the internet, exchange text messages
-                                            and more. Every product that is labeled as a Pocket PC must be
-                                            accompanied with specific software to operate the unit and must feature
-                                            a touchscreen and touchpad.</p>
-                                        <p>As is the case with any new technology product, the cost of a Pocket PC
-                                            was substantial during it’s early release. For approximately $700.00,
-                                            consumers could purchase one of top-of-the-line Pocket PCs in 2003.
-                                            These days, customers are finding that prices have become much more
-                                            reasonable now that the newness is wearing off. For approximately
-                                            $350.00, a new Pocket PC can now be purchased.</p>
-                                    </div>
-                                    <div class="product__details__tab__content__item">
-                                        <h5>Material used</h5>
-                                        <p>Polyester is deemed lower quality due to its none natural quality’s. Made
-                                            from synthetic materials, not natural like wool. Polyester suits become
-                                            creased easily and are known for not being breathable. Polyester suits
-                                            tend to have a shine to them compared to wool and cotton suits, this can
-                                            make the suit look cheap. The texture of velvet is luxurious and
-                                            breathable. Velvet is a great choice for dinner party jacket and can be
-                                            worn all year round.</p>
-                                    </div>
+                                    <?= $rowproduct['description'] ?>
                                 </div>
                             </div>
+
                             <div class="tab-pane" id="tabs-6" role="tabpanel">
-                                <div class="product__details__tab__content">
-                                    <div class="product__details__tab__content__item">
-                                        <h5>Products Infomation</h5>
-                                        <p>A Pocket PC is a handheld computer, which features many of the same
-                                            capabilities as a modern PC. These handy little devices allow
-                                            individuals to retrieve and store e-mail messages, create a contact
-                                            file, coordinate appointments, surf the internet, exchange text messages
-                                            and more. Every product that is labeled as a Pocket PC must be
-                                            accompanied with specific software to operate the unit and must feature
-                                            a touchscreen and touchpad.</p>
-                                        <p>As is the case with any new technology product, the cost of a Pocket PC
-                                            was substantial during it’s early release. For approximately $700.00,
-                                            consumers could purchase one of top-of-the-line Pocket PCs in 2003.
-                                            These days, customers are finding that prices have become much more
-                                            reasonable now that the newness is wearing off. For approximately
-                                            $350.00, a new Pocket PC can now be purchased.</p>
-                                    </div>
-                                    <div class="product__details__tab__content__item">
-                                        <h5>Material used</h5>
-                                        <p>Polyester is deemed lower quality due to its none natural quality’s. Made
-                                            from synthetic materials, not natural like wool. Polyester suits become
-                                            creased easily and are known for not being breathable. Polyester suits
-                                            tend to have a shine to them compared to wool and cotton suits, this can
-                                            make the suit look cheap. The texture of velvet is luxurious and
-                                            breathable. Velvet is a great choice for dinner party jacket and can be
-                                            worn all year round.</p>
-                                    </div>
+                                <div class="product__details__tab__content" id="custreview">
+                                    <?php
+                                    if (!empty($customerid)) {
+                                        $chkordered = $obj->selectfieldwhere("orders inner join orderitem on orderitem.orderid = orders.id", "count(orders.id)", "productid=" . $_GET['hakuna'] . " and orders.userid = " . $customerid . " and orders.status = 1");
+                                        $chkreview = $obj->selectfieldwhere("review", "count(id)", "productid=" . $_GET['hakuna'] . " and userid=" . $customerid . " and status =1");
+                                        if ($chkordered > 0 && $chkreview == 0) { ?>
+                                            <form action="process_rating.php" method="post">
+                                                <div class="ratings">
+                                                    <input type="radio" name="rating" id="star5" value="5">
+                                                    <label for="star5"></label>
+
+                                                    <input type="radio" name="rating" id="star4" value="4">
+                                                    <label for="star4"></label>
+
+                                                    <input type="radio" name="rating" checked id="star3" value="3">
+                                                    <label for="star3"></label>
+
+                                                    <input type="radio" name="rating" id="star2" value="2">
+                                                    <label for="star2"></label>
+
+                                                    <input type="radio" name="rating" id="star1" value="1">
+                                                    <label for="star1"></label>
+
+
+
+
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-6 offset-3">
+                                                        <textarea style="resize:none" class="form-control mt-1 mb-3" id="customerreview" placeholder="write a review"></textarea>
+                                                        <button id="ratingsubmit" class="form-control" value="">Submit Rating</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        <?php }
+                                    }
+                                    while ($rowreview = $obj->fetch_assoc($reviews)) {
+                                        ?>
+                                        <div class="row">
+                                            <div class="col-sm-5 offset-3 mb-2">
+                                                <div class="rating">
+                                                    <?php
+                                                    for ($i = 1; $i <= 5; $i++) {
+                                                        if ($i <= $rowreview['rating']) { ?>
+
+                                                            <i style="color:gold" class="fa fa-star"></i>
+                                                        <?php } else { ?>
+                                                            <i class="fa fa-star-o"></i>
+                                                    <?php }
+                                                    } ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div style="height:56px" class="col-sm-5 offset-3 form-control">
+                                                <!-- <div  class="col-sm-6 offset-3 form-control"> -->
+                                                <?= $rowreview['review'] ?>
+                                                <!-- </div> -->
+
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="col-sm-3 offset-7"><strong>- <?= $obj->selectfieldwhere("users", "name", "id=" . $rowreview['userid'] . "") ?></strong></div>
+                                        </div>
+                                    <?php } ?>
                                 </div>
+
+
                             </div>
-                            <div class="tab-pane" id="tabs-7" role="tabpanel">
-                                <div class="product__details__tab__content">
-                                    <p class="note">Nam tempus turpis at metus scelerisque placerat nulla deumantos
-                                        solicitud felis. Pellentesque diam dolor, elementum etos lobortis des mollis
-                                        ut risus. Sedcus faucibus an sullamcorper mattis drostique des commodo
-                                        pharetras loremos.</p>
-                                    <div class="product__details__tab__content__item">
-                                        <h5>Products Infomation</h5>
-                                        <p>A Pocket PC is a handheld computer, which features many of the same
-                                            capabilities as a modern PC. These handy little devices allow
-                                            individuals to retrieve and store e-mail messages, create a contact
-                                            file, coordinate appointments, surf the internet, exchange text messages
-                                            and more. Every product that is labeled as a Pocket PC must be
-                                            accompanied with specific software to operate the unit and must feature
-                                            a touchscreen and touchpad.</p>
-                                        <p>As is the case with any new technology product, the cost of a Pocket PC
-                                            was substantial during it’s early release. For approximately $700.00,
-                                            consumers could purchase one of top-of-the-line Pocket PCs in 2003.
-                                            These days, customers are finding that prices have become much more
-                                            reasonable now that the newness is wearing off. For approximately
-                                            $350.00, a new Pocket PC can now be purchased.</p>
-                                    </div>
-                                    <div class="product__details__tab__content__item">
-                                        <h5>Material used</h5>
-                                        <p>Polyester is deemed lower quality due to its none natural quality’s. Made
-                                            from synthetic materials, not natural like wool. Polyester suits become
-                                            creased easily and are known for not being breathable. Polyester suits
-                                            tend to have a shine to them compared to wool and cotton suits, this can
-                                            make the suit look cheap. The texture of velvet is luxurious and
-                                            breathable. Velvet is a great choice for dinner party jacket and can be
-                                            worn all year round.</p>
-                                    </div>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -290,144 +313,55 @@ ob_start()
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
-                <div class="product__item">
-                    <div class="product__item__pic set-bg" data-setbg="img/product/product-1.jpg">
-                        <span class="label">New</span>
-                        <ul class="product__hover">
-                            <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                            <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
-                        </ul>
-                    </div>
-                    <div class="product__item__text">
-                        <h6>Piqué Biker Jacket</h6>
-                        <a href="#" class="add-cart">+ Add To Cart</a>
-                        <div class="rating">
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
+            <?php
+            while ($rowpro = $obj->fetch_assoc($otherproducts)) { ?>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
+                    <div class="product__item">
+                        <div onclick="window.location.href='shopdetail?hakuna=<?= $rowpro['id'] ?>'" class="product__item__pic set-bg" data-setbg="<?= $obj->fetchattachment($rowpro['file_products']) ?>">
+                            <?php if ($rowpro['sticker'] !== 'None') { ?>
+                                <span class="label"><?= $rowpro['sticker'] ?></span>
+                            <?php } ?>
+                            <ul class="product__hover">
+                                <!-- <li><a href="#"><img src="main/dist/img/icon/heart.png" alt=""></a></li> -->
+                                <!-- <li><a href="#"><img src="main/dist/img/icon/compare.png" alt=""> <span>Compare</span></a></li> -->
+                                <li><a href="#"><img src="main/dist/img/icon/search.png" alt=""></a></li>
+                            </ul>
                         </div>
-                        <h5>$67.24</h5>
-                        <div class="product__color__select">
-                            <label for="pc-1">
-                                <input type="radio" id="pc-1">
-                            </label>
-                            <label class="active black" for="pc-2">
-                                <input type="radio" id="pc-2">
-                            </label>
-                            <label class="grey" for="pc-3">
-                                <input type="radio" id="pc-3">
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
-                <div class="product__item">
-                    <div class="product__item__pic set-bg" data-setbg="img/product/product-2.jpg">
-                        <ul class="product__hover">
-                            <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                            <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
-                        </ul>
-                    </div>
-                    <div class="product__item__text">
-                        <h6>Piqué Biker Jacket</h6>
-                        <a href="#" class="add-cart">+ Add To Cart</a>
-                        <div class="rating">
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                        </div>
-                        <h5>$67.24</h5>
-                        <div class="product__color__select">
-                            <label for="pc-4">
-                                <input type="radio" id="pc-4">
-                            </label>
-                            <label class="active black" for="pc-5">
-                                <input type="radio" id="pc-5">
-                            </label>
-                            <label class="grey" for="pc-6">
-                                <input type="radio" id="pc-6">
-                            </label>
+                        <div class="product__item__text">
+                            <h6><?= $rowpro['product_name'] ?></h6>
+                            <a onclick="addcart(<?= $rowpro['id'] ?>)" class="add-cart text-danger" style="cursor:pointer">+ Add To Cart</a>
+                            <?php
+                            $totalreview = $obj->selectfieldwhere("review", "count(id)", "status = 1  and productid= " . $rowpro['id'] . "");
+                            $totalrating =  $obj->selectfieldwhere("review", "sum(rating)", "status = 1  and productid= " . $rowpro['id'] . "");
+                            if ($totalreview > 0) {
+                                $avgrat = $totalrating / $totalreview;
+                            } else {
+                                $avgrat = 0;
+                            }
+                            ?>
+                            <div class="rating">
+                                <?php
+                                for ($i = 1; $i <= 5; $i++) {
+                                    if ($i <= ceil($avgrat)) { ?>
+                                        <i style="color:gold" class="fa fa-star"></i>
+                                    <?php } else { ?>
+                                        <i class="fa fa-star-o"></i>
+                                <?php }
+                                } ?>
+                                <!-- <span> - <?= $totalreview ?> Reviews</span> -->
+                            </div>
+                            <!-- <div class="rating">
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                            </div> -->
+                            <h5><?= $currencysymbol ?><?= $rowpro['final_price'] ?></h5>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
-                <div class="product__item sale">
-                    <div class="product__item__pic set-bg" data-setbg="img/product/product-3.jpg">
-                        <span class="label">Sale</span>
-                        <ul class="product__hover">
-                            <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                            <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
-                        </ul>
-                    </div>
-                    <div class="product__item__text">
-                        <h6>Multi-pocket Chest Bag</h6>
-                        <a href="#" class="add-cart">+ Add To Cart</a>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star-o"></i>
-                        </div>
-                        <h5>$43.48</h5>
-                        <div class="product__color__select">
-                            <label for="pc-7">
-                                <input type="radio" id="pc-7">
-                            </label>
-                            <label class="active black" for="pc-8">
-                                <input type="radio" id="pc-8">
-                            </label>
-                            <label class="grey" for="pc-9">
-                                <input type="radio" id="pc-9">
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6 col-sm-6">
-                <div class="product__item">
-                    <div class="product__item__pic set-bg" data-setbg="img/product/product-4.jpg">
-                        <ul class="product__hover">
-                            <li><a href="#"><img src="img/icon/heart.png" alt=""></a></li>
-                            <li><a href="#"><img src="img/icon/compare.png" alt=""> <span>Compare</span></a></li>
-                            <li><a href="#"><img src="img/icon/search.png" alt=""></a></li>
-                        </ul>
-                    </div>
-                    <div class="product__item__text">
-                        <h6>Diagonal Textured Cap</h6>
-                        <a href="#" class="add-cart">+ Add To Cart</a>
-                        <div class="rating">
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                            <i class="fa fa-star-o"></i>
-                        </div>
-                        <h5>$60.9</h5>
-                        <div class="product__color__select">
-                            <label for="pc-10">
-                                <input type="radio" id="pc-10">
-                            </label>
-                            <label class="active black" for="pc-11">
-                                <input type="radio" id="pc-11">
-                            </label>
-                            <label class="grey" for="pc-12">
-                                <input type="radio" id="pc-12">
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <?php } ?>
         </div>
     </div>
 </section>
@@ -442,3 +376,70 @@ $contentheader = "";
 $pageheader = "";
 include "main/templete.php";
 ?>
+<script>
+    const addcart = (productid) => {
+        event.preventDefault()
+        const selectedSize = $('input[name="size"]:checked').val();
+        $.post({
+            url: "main/addtocart.php",
+            data: {
+                productid: productid,
+                userid: '<?= $customerid ?>',
+                size: selectedSize
+            },
+            success: function(response) {
+                console.log(response)
+                if (response === 'Success') {
+                    alertify.success('Item Added to Cart');
+                } else if (response === 'Failed') {
+                    alertify.error('Item Already Added to Cart');
+                }
+            },
+        });
+    }
+
+    $('.product__details__option__size input[type="radio"]').on('click', function() {
+        const selectedSize = $('input[name="size"]:checked').val();
+        // console.log('Selected Size:', selectedSize);
+        $.post({
+            url: "main/fetchsizedetail.php",
+            data: {
+                productid: <?= $_GET['hakuna'] ?>,
+                size: selectedSize
+            },
+            success: function(response) {
+                console.log(response)
+                $('#sizedetail').html(response)
+                // if (response === 'Success') {
+                //     alertify.success('Item Added to Cart');
+                // } else if (response === 'Failed') {
+                //     alertify.error('Item Already Added to Cart');
+                // }
+            },
+        });
+        // Use the selectedSize variable for further processing
+    });
+
+    $('#ratingsubmit').on('click', function() {
+        event.preventDefault();
+        const selectedRating = $('input[name="rating"]:checked').val();
+        const review = $('#customerreview').val();
+        // console.log('Selected Size:', selectedRating);
+        $.post({
+            url: "main/fetchreviews.php",
+            data: {
+                productid: <?= $_GET['hakuna'] ?>,
+                rating: selectedRating,
+                review: review
+            },
+            success: function(response) {
+                if (response === 'Success') {
+                    alertify.success('Thanks for your review!');
+                } else if (response === 'Failed') {
+                    alertify.error('Sorry! Something went wrong');
+                }
+            },
+        });
+        // Use the selectedSize variable for further processing
+    });
+</script>

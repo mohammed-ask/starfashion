@@ -95,4 +95,24 @@ include "main/admin/templete.php";
             ]
         });
     });
+
+    $(document).on('click', '.cls', function() {
+        $(this).parents(".row").remove();
+    })
+
+    const addsizes = (productid) => {
+        $.post({
+            url: "../main/admin/fetchselectsize.php",
+            success: function(response) {
+                console.log(response)
+                $('.sizedata').append(response)
+                $(".select2").select2()
+                // if (response === 'Success') {
+                //     alertify.success('Item Added to Cart');
+                // } else if (response === 'Failed') {
+                //     alertify.error('Item Already Added to Cart');
+                // }
+            },
+        });
+    }
 </script>

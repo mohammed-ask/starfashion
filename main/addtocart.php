@@ -2,6 +2,7 @@
 include "./function.php";
 include "./conn.php";
 // print_r($_POST);
+// die;
 if (!empty($_POST['userid'])) {
     $productid = $obj->selectfieldwhere("cart", "count(id)", "productid=" . $_POST['productid'] . " and userid = " . $_POST['userid'] . " and status = 1");
     if (empty($productid) || $productid === 0) {
@@ -13,6 +14,7 @@ if (!empty($_POST['userid'])) {
         $xx['status'] = 1;
         $xx['productid'] = $_POST['productid'];
         $xx['userid'] = $_POST['userid'];
+        $xx['size'] = isset($_POST['size']) ? $_POST['size'] : 'M';
         $xx['productname'] = $obj->selectfieldwhere("products", "product_name", "id=" . $xx['productid'] . " and status = 1");
         $xx['file_product'] = $obj->selectfieldwhere("products", "file_products", "id=" . $xx['productid'] . " and status = 1");
         $cartid = $obj->insertnew($tb_name, $xx);

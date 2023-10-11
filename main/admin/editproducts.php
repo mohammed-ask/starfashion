@@ -2,6 +2,7 @@
 include "main/session.php";
 $pid = $_GET['hakuna'];
 $result = $obj->selectextrawhere("products", "id=$pid");
+$sizes = $obj->selectextrawhere("sizedetail", "productid=$pid and status = 1");
 $row = $obj->fetch_assoc($result);
 ?>
 <!-- <div class="row">
@@ -23,18 +24,7 @@ $row = $obj->fetch_assoc($result);
             <option <?php echo (in_array("Hot Sales", explode(",", $row['product_display_position']))) ? 'selected="selected"' : ''; ?> value="Hot Sales">Hot Sales</option>
         </select>
     </label>
-    <label class="block text-md">
-        <span class="text-gray-700 dark:text-gray-400">Size</span>
-        <select data-bvalidator="required" class="form-control" name="size[]" multiple>
-            <option <?php echo (in_array("Any", explode(",", $row['size']))) ? 'selected="selected"' : ''; ?> value="Any">Any</option>
-            <option <?php echo (in_array("S", explode(",", $row['size']))) ? 'selected="selected"' : ''; ?> value="S">S</option>
-            <option <?php echo (in_array("M", explode(",", $row['size']))) ? 'selected="selected"' : ''; ?> value="M">M</option>
-            <option <?php echo (in_array("L", explode(",", $row['size']))) ? 'selected="selected"' : ''; ?> value="L">L</option>
-            <option <?php echo (in_array("XL", explode(",", $row['size']))) ? 'selected="selected"' : ''; ?> value="XL">XL</option>
-            <option <?php echo (in_array("XXl", explode(",", $row['size']))) ? 'selected="selected"' : ''; ?> value="XXl">XXL</option>
-            <option <?php echo (in_array("XXXl", explode(",", $row['size']))) ? 'selected="selected"' : ''; ?> value="XXXl">XXXL</option>
-        </select>
-    </label><br>
+
     <label class="block text-md" style="margin-bottom: 5px;">
         <span class="text-gray-700 dark:text-gray-400">Category</span>
         <select data-bvalidator="required" class="form-control select2" name="category_id" id="categoryid">
@@ -148,18 +138,50 @@ $row = $obj->fetch_assoc($result);
             <option value="GREEN" <?= $row['color'] === "GREEN" ? "Selected" : "" ?>>GREEN</option>
         </select>
     </label><br>
+    <label class="block text-md">
+        <span class="text-gray-700 dark:text-gray-400">Size</span>
+        <select data-bvalidator="required" class="form-control" name="size[]" multiple>
+            <option <?php echo (in_array("Any", explode(",", $row['size']))) ? 'selected="selected"' : ''; ?> value="Any">Any</option>
+            <option <?php echo (in_array("S", explode(",", $row['size']))) ? 'selected="selected"' : ''; ?> value="S">S</option>
+            <option <?php echo (in_array("M", explode(",", $row['size']))) ? 'selected="selected"' : ''; ?> value="M">M</option>
+            <option <?php echo (in_array("L", explode(",", $row['size']))) ? 'selected="selected"' : ''; ?> value="L">L</option>
+            <option <?php echo (in_array("XL", explode(",", $row['size']))) ? 'selected="selected"' : ''; ?> value="XL">XL</option>
+            <option <?php echo (in_array("XXl", explode(",", $row['size']))) ? 'selected="selected"' : ''; ?> value="XXl">XXL</option>
+            <option <?php echo (in_array("XXXl", explode(",", $row['size']))) ? 'selected="selected"' : ''; ?> value="XXXl">XXXL</option>
+        </select>
+    </label><br>
     <label class="block text-sm" style="margin-bottom: 5px;">
         <span class="text-gray-700 dark:text-gray-400">Width x Height x Length</span>
-        <div class="row ml-1 mr-1">
-            <input type="number" step="any" placeholder="Width" xdata-bvalidator="required" value="<?= $row['width'] ?>" class="form-control col-sm-4" name="width">
-            <input type="number" step="any" placeholder="Height" xdata-bvalidator="required" value="<?= $row['height'] ?>" class="form-control col-sm-4" name="height">
-            <input type="number" step="any" placeholder="Length" xdata-bvalidator="required" value="<?= $row['length'] ?>" class="form-control col-sm-4" name="length">
-            <select data-bvalidator="required" class="form-control select2 col-sm-3" name="width_height_length_unit">
-                <option value="Meter" <?= $row['width_height_length_unit'] === "Meter" ? "Selected" : "" ?>>Meter</option>
-                <option value="Feet" <?= $row['width_height_length_unit'] === "Feet" ? "Selected" : "" ?>>Feet</option>
-                <option value="CM" <?= $row['width_height_length_unit'] === "CM" ? "Selected" : "" ?>>CM</option>
-            </select>
+        <div class="sizedata">
+            <?php
+            while ($rowsize = $obj->fetch_assoc($sizes)) { ?>
+                <div class="row ml-1 mr-1 mb-4">
+                    <input type="number" step="any" placeholder="Width" xdata-bvalidator="required" value="<?= $rowsize['width'] ?>" class="form-control col-sm-4" name="width[]">
+                    <input type="number" step="any" placeholder="Height" xdata-bvalidator="required" value="<?= $rowsize['height'] ?>" class="form-control col-sm-4" name="height[]">
+                    <input type="number" step="any" placeholder="Length" xdata-bvalidator="required" value="<?= $rowsize['length'] ?>" class="form-control col-sm-4" name="length[]">
+                    <select data-bvalidator="required" class="form-control select2 col-sm-3" name="unit[]">
+                        <option value="Meter" <?= $rowsize['unit'] === "Meter" ? "Selected" : "" ?>>Meter</option>
+                        <option value="Feet" <?= $rowsize['unit'] === "Feet" ? "Selected" : "" ?>>Feet</option>
+                        <option value="CM" <?= $rowsize['unit'] === "CM" ? "Selected" : "" ?>>CM</option>
+                    </select>
+                    <!-- <label class="block text-md"> -->
+                    <!-- <span class="text-gray-700 dark:text-gray-400">Size</span> -->
+                    <select data-bvalidator="required" class="form-control select2" name="sizename[]">
+                        <!-- <option value="Any">Any</option> -->
+                        <!-- <option value="Free Size">Free Size</option> -->
+                        <option value="S" <?= $rowsize['sizename'] === "S" ? "Selected" : "" ?>>S</option>
+                        <option value="M" <?= $rowsize['sizename'] === "M" ? "Selected" : "" ?>>M</option>
+                        <option value="L" <?= $rowsize['sizename'] === "L" ? "Selected" : "" ?>>L</option>
+                        <option value="XL" <?= $rowsize['sizename'] === "XL" ? "Selected" : "" ?>>XL</option>
+                        <option value="XXl" <?= $rowsize['sizename'] === "XXl" ? "Selected" : "" ?>>XXl</option>
+                        <option value="XXXl" <?= $rowsize['sizename'] === "XXXl" ? "Selected" : "" ?>>XXXl</option>
+                    </select>
+                    <!-- </label><br> -->
+                </div>
+            <?php } ?>
         </div>
+        <button onclick="event.preventDefault();addsizes()" class="px-4 py-2  text-sm  bg-blue  rounded-lg">Add Size</button>
+
     </label>
     <label class="block text-sm" style="margin-bottom: 5px;">
         <span class="text-gray-700 dark:text-gray-400">Weight</span>

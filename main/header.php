@@ -41,17 +41,18 @@
                     <ul>
                         <li class="active"><a class="noun" href="./index">Home</a></li>
                         <li><a class="noun" href="shop">Shop</a></li>
-                        <li><a class="noun" href="#">Pages</a>
+                        <!-- <li><a class="noun" href="blogl">Blog</a></li> -->
+                        <li><a class="noun" href="orders">My Orders</a></li>
+                        <li><a class="noun" href="info?hakuna=contact_us">Contacts</a></li>
+                        <li><a class="noun" href="#">More</a>
                             <ul class="dropdown">
-                                <li><a href="./about.html">About Us</a></li>
-                                <li><a href="./shop-details.html">Shop Details</a></li>
-                                <li><a href="./shopping-cart.html">Shopping Cart</a></li>
-                                <li><a href="./checkout.html">Check Out</a></li>
-                                <li><a href="./blog-details.html">Blog Details</a></li>
+                                <li><a href="info?hakuna=about">About Us</a></li>
+                                <!-- <li><a href="./shop-details.html">Shop Details</a></li> -->
+                                <!-- <li><a href="./shopping-cart.html">Shopping Cart</a></li> -->
+                                <!-- <li><a href="./checkout.html">Check Out</a></li> -->
+                                <li><a href="info?hakuna=terms_condition">Terms and Conditions</a></li>
                             </ul>
                         </li>
-                        <!-- <li><a class="noun" href="blogl">Blog</a></li> -->
-                        <li><a class="noun" href="contactus">Contacts</a></li>
                     </ul>
                 </nav>
             </div>
@@ -59,7 +60,7 @@
                 <div class="header__nav__option">
                     <a href="#" class="search-switch"><img src="main/dist/img/icon/search.png" alt=""></a>
                     <a href="#"><img src="main/dist/img/icon/heart.png" alt=""></a>
-                    <a style="cursor:pointer" onclick="<?= !empty($userData) ? 'redir(\'' . $userData["userid"] . '\',\'\',\'cart\',\'_blank\')' : 'window.location.href=\'cart\'' ?>">
+                    <a style="cursor:pointer" onclick="window.location.href='cart'">
                         <img src="main/dist/img/icon/cart.png" alt="">
                         <span>0</span>
                     </a>

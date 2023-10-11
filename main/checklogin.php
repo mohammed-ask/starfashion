@@ -1,5 +1,6 @@
 <?php
 session_start();
+$redirectot = 'index';
 $captcha_code = $_SESSION['captcha_code'];
 if ($captcha_code !== (int)$_POST['captcha']) {
     echo "<div class='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative' role='alert'>Invalid Captcha</div>";
@@ -58,7 +59,27 @@ if ($num) {
                 $cookieData = json_encode($userData);
                 setcookie('userData', $cookieData, time() + (86400 * 30), '/');
                 $obj->insertnew('loginlog', $log);
-                echo "Redirect : Logged in SuccessfullyURLindex";
+                // if (isset($_COOKIE['checkoutData'])) {
+                // }
+                if (isset($_COOKIE['cartData'])) {
+                    $cart = $obj->selectfieldwhere("cart", 'count(id)', "userid=" . $row['id'] . " and status = 1");
+                    if (empty($cart) || $cart === 0) {
+                        $cookiecart = json_decode($_COOKIE['cartData'], true);
+                        $redirectot = 'cart';
+                        foreach ($cookiecart as $data) {
+                            $xx['added_on'] = date('Y-m-d H:i:s');
+                            $xx['added_by'] = $row['id'];
+                            $xx['updated_on'] = date('Y-m-d H:i:s');
+                            $xx['status'] = 1;
+                            $xx['productid'] = $data['productid'];
+                            $xx['productname'] = $data['productname'];
+                            $xx['file_product'] = $data['file_product'];
+                            $xx['userid'] = $row['id'];
+                            $cartid = $obj->insertnew($redirectot, $xx);
+                        }
+                    }
+                }
+                echo "Redirect : Logged in SuccessfullyURL$redirectot";
             }
         } else {
             echo "Error : Password is incorrect.";

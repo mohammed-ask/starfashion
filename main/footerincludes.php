@@ -62,7 +62,7 @@
 <script src="main/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
 <script src="main/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 <!-- Select2 -->
-<script src="main/plugins/select2/js/select2.full.min.js"></script>
+<!-- <script src="main/plugins/select2/js/select2.full.min.js"></script> -->
 
 <!-- JQVMap -->
 <script src="main/plugins/jqvmap/jquery.vmap.min.js"></script>

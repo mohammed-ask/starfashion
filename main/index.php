@@ -58,27 +58,6 @@ foreach ($alltrends as $item) {
                 </div>
             </div>
         <?php } ?>
-        <!-- <div class="hero__items set-bg" data-setbg="main/dist/img/hero/hero-2.jpg">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-5 col-lg-7 col-md-8">
-                        <div class="hero__text">
-                            <h6>Summer Collection</h6>
-                            <h2>Fall - Winter Collections 2030</h2>
-                            <p>A specialist label creating luxury essentials. Ethically crafted with an unwavering
-                                commitment to exceptional quality.</p>
-                            <a href="#" class="primary-btn">Shop now <span class="arrow_right"></span></a>
-                            <div class="hero__social">
-                                <a href="#"><i class="fa fa-facebook"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-pinterest"></i></a>
-                                <a href="#"><i class="fa fa-instagram"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
     </div>
 </section>
 <!-- Hero Section End -->
@@ -95,7 +74,7 @@ foreach ($alltrends as $item) {
                         </div>
                         <div class="banner__item__text">
                             <h2><?= $rowfeatured[0]['product_name'] ?></h2>
-                            <a href="#">Shop now</a>
+                            <a href="shopdetail?hakuna=<?= $rowfeatured[0]['id'] ?>">Shop now</a>
                         </div>
                     </div>
                 </div>
@@ -108,7 +87,7 @@ foreach ($alltrends as $item) {
                         </div>
                         <div class="banner__item__text">
                             <h2><?= $rowfeatured[1]['product_name'] ?></h2>
-                            <a href="#">Shop now</a>
+                            <a href="shopdetail?hakuna=<?= $rowfeatured[1]['id'] ?>">Shop now</a>
                         </div>
                     </div>
                 </div>
@@ -121,7 +100,7 @@ foreach ($alltrends as $item) {
                         </div>
                         <div class="banner__item__text">
                             <h2><?= $rowfeatured[2]['product_name'] ?></h2>
-                            <a href="#">Shop now</a>
+                            <a href="shopdetail?hakuna=<?= $rowfeatured[2]['id'] ?>">Shop now</a>
                         </div>
                     </div>
                 </div>
@@ -158,12 +137,12 @@ foreach ($alltrends as $item) {
             <?php foreach ($alltrendsfiltered as $key => $value) { ?>
                 <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix <?= str_replace(',', ' ', $value['product_display_position']) ?>">
                     <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="<?= $obj->fetchattachment($value['file_products']) ?>">
+                        <div onclick="window.location.href='shopdetail?hakuna=<?= $value['id'] ?>'" style="cursor:pointer" class="product__item__pic set-bg" data-setbg="<?= $obj->fetchattachment($value['file_products']) ?>">
                             <?php if ($value['sticker'] !== 'None') { ?>
                                 <span class="label"><?= $value['sticker'] ?></span>
                             <?php } ?>
                             <ul class="product__hover">
-                                <li><a href="#"><img src="main/dist/img/icon/heart.png" alt=""></a></li>
+                                <!-- <li><a href="#"><img src="main/dist/img/icon/heart.png" alt=""></a></li> -->
                                 <!-- <li><a href="#"><img src="main/dist/img/icon/compare.png" alt=""> <span>Compare</span></a></li> -->
                                 <li><a href="#"><img src="main/dist/img/icon/search.png" alt=""></a></li>
                             </ul>
@@ -179,7 +158,7 @@ foreach ($alltrends as $item) {
                                 <i class="fa fa-star-o"></i>
                             </div>
                             <h5><?= $currencysymbol ?><?= $value['final_price'] ?></h5>
-                            <div class="product__color__select">
+                            <!-- <div class="product__color__select">
                                 <label for="pc-1">
                                     <input type="radio" id="pc-1">
                                 </label>
@@ -189,7 +168,7 @@ foreach ($alltrends as $item) {
                                 <label class="grey" for="pc-3">
                                     <input type="radio" id="pc-3">
                                 </label>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -240,7 +219,7 @@ foreach ($alltrends as $item) {
                             <p>Seconds</p>
                         </div>
                     </div>
-                    <a href="#" class="primary-btn">Shop now</a>
+                    <a href="shopdetail?hakuna=<?= $rowspecial['id'] ?>" class="primary-btn">Shop now</a>
                 </div>
             </div>
         </div>

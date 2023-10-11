@@ -1202,3 +1202,18 @@ function getfirstandlastday($today)
     }
     return array("startdate" => $startdate, "enddate" => $enddate);
 }
+
+function generateOrderID($userID, $finalTotal)
+{
+    // Get the current timestamp in milliseconds
+    $timestamp = round(microtime(true) * 1000);
+
+    // Concatenate user ID, timestamp, and final total
+    $dataToHash = $userID . $timestamp;
+    // . '-' . $finalTotal;
+
+    // Generate the hash using the SHA-256 algorithm (you can use other algorithms like MD5 as well)
+    // $orderID = hash('sha256', $dataToHash);
+
+    return $dataToHash;
+}

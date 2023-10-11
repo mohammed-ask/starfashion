@@ -13,7 +13,7 @@ $postdata = $_POST;
 $pradin = $obj->insertnew($tb_name, $postdata);
 if (is_integer($pradin) && $pradin > 0) {
 
-    echo "Redirect :New Supplier has been Added to your Catalogue URLsuppliers.php";
+    echo "Redirect :New Supplier has been Added to your Catalogue URLsuppliers";
 } else {
     echo "Some Error Occured";
 }

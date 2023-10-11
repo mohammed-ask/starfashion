@@ -461,6 +461,9 @@ switch ($request['path']) {
     case "$head/faqs";
         require __DIR__ . '/main/viewfaqs.php';
         break;
+    case "$head/insertorder";
+        require __DIR__ . '/main/insertorder.php';
+        break;
     default:
         http_response_code(404);
         require __DIR__ . '/404.html';
